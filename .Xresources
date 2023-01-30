@@ -1,0 +1,113 @@
+##### THIS FILE IS BEING CURRENTLY MANAGED BY URXVTCONFIG #####
+##### CHANGES DONE TO THIS FILE MANUALLY MAY AFFECT THE FUNCTIONALITY ######
+##### PROCEED WITH CAUTION! #####
+! Xft.autohint: false
+! Xft.lcdfilter: lcddefault
+! Xft.hintstyle: hintsfull
+! Xft.hinting: true
+! Xft.antialias: true
+! Xft.rgba: rgb
+! Xft.dpi: 88
+
+! Xft.autohint: false	
+! Xft.dpi: 88
+! Xft.antialias: true
+! Xft.hinting: false
+! Xft.rgba: rgb
+! ! Xft.hintstyle: hintfull
+! ! Xft.lcdfilter: lcddefault
+
+Xft.dpi:        90
+Xft.antialias:  true
+Xft.rgba:       rgb
+Xft.hinting:    true
+Xft.hintstyle:  hintfull
+
+discord.hintstyle: hintsnone
+
+! special colors
+*.foreground:  #c0c5ce
+*.background:  #2b303b
+*.cursorColor:  #c0c5ce
+! black
+*.color0:      #2b303b
+*.color8:      #65737e
+! red
+*.color1:      #95e353
+*.color9:      #bf616a
+! green
+*.color2:      #928a7e
+*.color10:     #a3be8c
+! yellow
+*.color3:      #fefefe
+*.color11:     #ebcb8b
+! blue
+*.color4:      #7d7d7c
+*.color12:     #8fa1b3
+! magenta
+*.color5:      #e5786d
+*.color13:     #b48ead
+! cyan
+*.color6:      #96b5b4
+*.color14:     #96b5b4
+! white
+*.color7:      #c0c5ce
+*.color15:     #eff1f5
+
+URxvt*scrollBar:         false
+URxvt*scrollBar_right:   false
+URxvt.geometry: 80x-1
+
+URxvt*transparent:       true
+URxvt*shading:       42
+
+!! Andale Mono
+! URxvt.font: xft:Andale Mono for Powerline:size=9
+! URxvt.letterSpace: -4
+URxvt.intensityStyles:	false
+
+!! Monospace
+! URxvt.font:		xft:monospace:size=10
+
+!! Source Code Pro
+URxvt.font: 			xft:source code pro:size=10
+URxvt*letterSpace: 		-1
+
+! Emacs.font:				Essential PragmataPro-12
+! URxvt.allow_bold:		true
+
+
+!! Extensions
+URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select
+URxvt.colorUL:		#4682B4
+!! url-select:
+URxvt.keysym.M-u:	perl:url-select:select_next
+URxvt.url-select.launcher:	/usr/bin/xdg-open
+URxvt.url-select.underline:	true
+!! keyboard-select
+URxvt.keysym.M-Escape:	perl:keyboard-select:activate
+!! resize-font
+URxvt.resize-font.smaller:	C--
+URxvt.resize-font.bigger:	C-+
+!! matcher
+URxvt.url-launcher:	/usr/bin/xdg-open
+URxvt.matcher.button:	1
+
+
+
+URxvt.keysym.Control-Shift-C: eval:copy_clipboard
+URxvt.perl-ext-common: default,ctrl_v_paste,selection-to-clipboard,pasta
+URxvt.keysym.Control-Shift-V    : perl:pasta:paste
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
+URxvt.keysym.Control-l: command:\033c
+
+! :Bind C-0, C-+ and C-= to activate small, medium, and big font size resp.     
+URxvt.keysym.C-0: command:\033]710;-*-dina-medium-r-normal--13-*-*-*-*-*-*-*\007
+URxvt.keysym.C-minus: command:\033]710;-*-dina-medium-r-normal--15-*-*-*-*-*-*-*\007
+URxvt.keysym.C-equal: command:\033]710;-*-dina-medium-r-normal--16-*-*-*-*-*-*-*\007
+
+*antialias:  true
+*autohint:   true
+
