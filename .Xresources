@@ -73,41 +73,38 @@ URxvt.intensityStyles:	false
 URxvt.font: 			xft:source code pro:size=10
 URxvt*letterSpace: 		-1
 
-! Emacs.font:				Essential PragmataPro-12
-! URxvt.allow_bold:		true
-
-
 !! Extensions
 URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select
 URxvt.colorUL:		#4682B4
+
 !! url-select:
 URxvt.keysym.M-u:	perl:url-select:select_next
 URxvt.url-select.launcher:	/usr/bin/xdg-open
 URxvt.url-select.underline:	true
+
 !! keyboard-select
 URxvt.keysym.M-Escape:	perl:keyboard-select:activate
-!! resize-font
-URxvt.resize-font.smaller:	C--
-URxvt.resize-font.bigger:	C-+
+!! resizing commands
+ URxvt.keysym.C-Down:  resize-font:smaller
+ URxvt.keysym.C-Up:    resize-font:bigger
+ 
 !! matcher
 URxvt.url-launcher:	/usr/bin/xdg-open
 URxvt.matcher.button:	1
 
-
-
+!! copy and paste
 URxvt.keysym.Control-Shift-C: eval:copy_clipboard
 URxvt.perl-ext-common: default,ctrl_v_paste,selection-to-clipboard,pasta
 URxvt.keysym.Control-Shift-V    : perl:pasta:paste
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 
+!! clear terminal
 URxvt.keysym.Control-l: command:\033c
-
-! :Bind C-0, C-+ and C-= to activate small, medium, and big font size resp.     
-URxvt.keysym.C-0: command:\033]710;-*-dina-medium-r-normal--13-*-*-*-*-*-*-*\007
-URxvt.keysym.C-minus: command:\033]710;-*-dina-medium-r-normal--15-*-*-*-*-*-*-*\007
-URxvt.keysym.C-equal: command:\033]710;-*-dina-medium-r-normal--16-*-*-*-*-*-*-*\007
 
 *antialias:  true
 *autohint:   true
 
+!! binding: move between words
+URxvt.keysym.M-Left:   \033[1;5D
+URxvt.keysym.M-Right:  \033[1;5C
