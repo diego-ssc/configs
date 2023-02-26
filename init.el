@@ -124,6 +124,8 @@
 
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
+;; move to the neotree buffer
+(global-set-key (kbd "s-s") 'neotree-show)
 ;; Set the neo-window-width to the current width of the
 ;; neotree window, to trick neotree into resetting the
 ;; width back to the actual window width.
@@ -139,7 +141,7 @@
 
 ;; Kill whole-line, copying it to clipboard
 ;; Sets `C-c d` to `M-x kill-whole-line`
-(global-set-key "\C-cd" 'kill-whole-line)     
+(global-set-key (kbd "C-c d") 'kill-whole-line)     
 
 ;; Every time when the neotree window is opened, let it find current file and jump to node.
 (setq neo-smart-open t)
