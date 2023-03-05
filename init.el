@@ -18,7 +18,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(dockerfile-mode projectile auto-complete-auctex evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property org-ac cff org ggtags auto-complete-c-headers ac-math ac-haskell-process ac-c-headers meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -223,7 +223,7 @@
 (require 'org-appear)
 (require 'org-alert)
 (require 'org-agenda-property)
-(require 'org-ac)
+;; (require 'org-ac)
 (require 'org-super-agenda)
 (require 'org-tree-slide)
 (require 'org-modern)
@@ -283,21 +283,27 @@
              (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
 
 ;; Auto-complete
-(require 'auto-complete)
-(global-auto-complete-mode t)
+;; (use-package auto-complete :config (ac-flyspell-workaround))
+;; (require 'auto-complete :config (ac-flyspell-workaround))
+;; (global-auto-complete-mode t)
+(require 'company-auctex)
+(company-auctex-init)
+(add-hook 'after-init-hook 'global-company-mode)
+
+(add-to-list 'company-backends 'company-c-headers)
 
 ;; Auto-compete Auctex
-(require 'auto-complete-auctex)
+;; (require 'auto-complete-auctex)
 
 ;; Auto-complete C-Headers
-(require 'auto-complete-c-headers)
-(require 'ac-c-headers)
+;; (require 'auto-complete-c-headers)
+;; (require 'ac-c-headers)
 
 ;; Auto-complete Latex-Math-Mode
-(require 'ac-math)
+;; (require 'ac-math)
 
 ;; Auto-complete Haskell
-(require 'ac-haskell-process)
+;; (require 'ac-haskell-process)
 
 ;; Move selected region (or line) up/down
 (defun move-text-internal (arg)
