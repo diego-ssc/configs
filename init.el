@@ -12,7 +12,8 @@
    ["#ffffff" "#ffffff" "#ffffff" "#ffffff" "#928a7e" "#ffffff" "#ffffff" "gray90"])
  '(company-backends
    '(company-c-headers
-     (company-keywords company-semantic company-capf company-clang company-bbdb)
+     (company-keywords company-semantic company-capf company-clang company-bbdb company-dabbrev-code)
+     company-dabbrev-code
      (company-auctex-macros company-auctex-symbols company-auctex-environments)
      company-auctex-bibs company-auctex-labels company-cmake company-files company-oddmuse company-dabbrev))
  '(custom-enabled-themes '(Lambda))
