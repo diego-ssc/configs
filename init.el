@@ -12,8 +12,8 @@
    ["#ffffff" "#ffffff" "#ffffff" "#ffffff" "#928a7e" "#ffffff" "#ffffff" "gray90"])
  '(company-backends
    '(company-c-headers
-     (company-auctex-macros company-auctex-symbols company-auctex-environments company-keywords)
-     company-auctex-bibs company-auctex-labels company-bbdb company-semantic company-cmake company-capf company-clang company-files
+     (company-auctex-macros company-auctex-symbols company-auctex-environments company-keywords company-capf)
+     company-auctex-bibs company-auctex-labels company-bbdb company-semantic company-cmake company-capf company-files company-keywords
      (company-dabbrev-code company-gtags company-etags company-clang)
      company-oddmuse company-dabbrev))
  '(custom-enabled-themes '(Lambda))
