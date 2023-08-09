@@ -18,6 +18,7 @@ import XMonad.Actions.Warp
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Util.Themes
 import XMonad.Layout.Tabbed
 import System.IO
@@ -65,8 +66,8 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]-- /61728 - Terminal Icon
 
 -- Border colors for unfocused and focused windows, respectively.
 --
-myNormalBorderColor  = "#323232"
-myFocusedBorderColor = "#323232"--"#646464"
+myNormalBorderColor  = "#000000"
+myFocusedBorderColor = "#000000"--"#323232"--"#646464"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -161,6 +162,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Take selection screenshot
     , ((controlMask .|. shiftMask, xK_s), spawn "maim -s -u ~/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i")
 
+    -- , (xmonad $ def {} `removeKeys` (controlMask, xK_Tab))
     -- Clear terminal
     --, ((controlMask, xK_l), spawn "tput reset")
     ]
@@ -196,9 +198,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         --, ((modm, xK_f), spawn "lf")
 
     ++
-    
+
     -- mod-{e}, launch emacs
-    
+
     [((modm, xK_e), spawn "emacsclient -c -a 'emacs'")]
     ++
     --
@@ -266,17 +268,17 @@ myLayout = tiled  ||| Mirror tiled ||| Full  --tabbed shrinkText (theme adwaitaD
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
-myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore
-    --, resource  =? "terminator"     --> doRectFloat (W.RationalRect 0.25 0.25 0.5 0.5)
-    , resource  =? "glade-previewer" --> doFloat
-    , resource  =? "proyecto1" --> doFloat
-    , resource  =? "music_player" --> doFloat
-    , isFullscreen --> doFullFloat
-    , className =? "steam" --> doCenterFloat]
+-- myManageHook = composeAll
+--     [ className =? "MPlayer"        --> doFloat
+--     , className =? "Gimp"           --> doFloat
+--     , resource  =? "desktop_window" --> doIgnore
+--     , resource  =? "kdesktop"       --> doIgnore
+--     --, resource  =? "terminator"     --> doRectFloat (W.RationalRect 0.25 0.25 0.5 0.5)
+--     , resource  =? "glade-previewer" --> doFloat
+--     , resource  =? "proyecto1" --> doFloat
+--     , resource  =? "music_player" --> doFloat
+--     , isFullscreen --> doFullFloat
+--     , className =? "steam" --> doCenterFloat]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -287,7 +289,7 @@ myManageHook = composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
--- myEventHook =
+-- myEventHook = 
 
 ------------------------------------------------------------------------
 -- Status bars and logging
@@ -305,7 +307,7 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = do 
+myStartupHook = do
   spawn "emacs --daemon"
 
 ------------------------------------------------------------------------
@@ -331,8 +333,7 @@ toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad =<< statusBar myBar myPP toggleStrutsKey defaults
-
+main = xmonad . ewmh =<< statusBar myBar myPP toggleStrutsKey defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -357,11 +358,11 @@ defaults = def {
 
       -- hooks, layouts
         layoutHook         = spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $ myLayout,--spacingWithEdge
-        manageHook         = myManageHook,
---        handleEventHook    = myEventHook,
+        -- manageHook         = fullscreenManageHook,
+        -- handleEventHook    = handleEventHook defaults <+> fullscreenEventHook,
         logHook            = myLogHook,
         startupHook        = myStartupHook
-        }
+        } `removeKeys` [(controlMask, xK_Tab)]
 
 -- | Finally, a copy of the default bindings in simple textual tabular format.
 help :: String

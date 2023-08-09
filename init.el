@@ -47,6 +47,7 @@
  '(font-latex-math-face ((t (:foreground "#928a7e" :weight bold))))
  '(font-latex-script-char-face ((t (:foreground "#c0c5ce"))))
  '(font-latex-sectioning-2-face ((t (:foreground "#ffffff" :weight bold :height 1.1))))
+ '(font-latex-sectioning-3-face ((t (:foreground "#ffffff" :weight bold))))
  '(font-latex-warning-face ((t (:foreground "#c0c5ce" :inherit bold))))
  '(font-lock-string-face ((t (:foreground "#928a7e"))))
  '(font-lock-type-face ((t (:foreground "#c0c5ce"))))
@@ -289,10 +290,7 @@
            (lambda ()
              (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
 
-;; Auto-complete
-;; (use-package auto-complete :config (ac-flyspell-workaround))
-;; (require 'auto-complete :config (ac-flyspell-workaround))
-;; (global-auto-complete-mode t)
+;; Auto-complete [Company mode]
 (require 'company-auctex)
 (company-auctex-init)
 (add-hook 'after-init-hook 'global-company-mode)
@@ -300,18 +298,6 @@
 (setq company-minimum-prefix-length 2)
 (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
 (add-to-list 'company-backends 'company-c-headers)
-;; Auto-compete Auctex
-;; (require 'auto-complete-auctex)
-
-;; Auto-complete C-Headers
-;; (require 'auto-complete-c-headers)
-;; (require 'ac-c-headers)
-
-;; Auto-complete Latex-Math-Mode
-;; (require 'ac-math)
-
-;; Auto-complete Haskell
-;; (require 'ac-haskell-process)
 
 ;; Move selected region (or line) up/down
 (defun move-text-internal (arg)
