@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -298,6 +298,12 @@
 (setq company-minimum-prefix-length 2)
 (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
 (add-to-list 'company-backends 'company-c-headers)
+
+;; Racket
+(require 'smartparens-config)
+
+;; Always start smartparens mode in js-mode.
+(add-hook 'racket-mode-hook #'smartparens-strict-mode)
 
 ;; Move selected region (or line) up/down
 (defun move-text-internal (arg)
