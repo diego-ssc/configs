@@ -30,6 +30,11 @@ M-x package-install-selected-packages
 M-x all-the-icons-install-fonts
 ```
 
+For faster racket:
+```
+M-x racket-mode-start-faster
+```
+
 ## ly
 ```
 https://github.com/fairyglade/ly

@@ -303,13 +303,8 @@
 (require 'smartparens-config)
 
 ;; Always start smartparens mode in racket-mode.
-(add-hook 'racket-mode-hook #'smartparens-strict-mode)
-(add-hook 'c-mode-common-hook   #'smartparens-strict-mode)
-(add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-(add-hook 'java-mode-hook       #'smartparens-strict-mode)
-(add-hook 'lisp-mode-hook       #'smartparens-strict-mode)
-(add-hook 'perl-mode-hook       #'smartparens-strict-mode)
-(add-hook 'sh-mode-hook         #'smartparens-strict-mode)
+(add-hook 'racket-repl-mode #'smartparens-mode)
+(smartparens-global-mode t)
 
 ;; Move selected region (or line) up/down
 (defun move-text-internal (arg)
