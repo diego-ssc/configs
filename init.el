@@ -101,7 +101,7 @@
 (evil-mode 1)
 (setcdr evil-insert-state-map nil)
 (define-key evil-insert-state-map
-  (read-kbd-macro evil-toggle-key) 'evil-normal-state)
+            (read-kbd-macro evil-toggle-key) 'evil-normal-state)
 (define-key evil-insert-state-map [escape] 'evil-normal-state)
 (define-key evil-normal-state-map "\C-e" 'evil-end-of-line)
 (define-key evil-visual-state-map "\C-e" 'evil-end-of-line)
@@ -284,11 +284,11 @@
 ;; defines shortcut for find source/header file for the current
 ;; file
 (add-hook 'c++-mode-hook
-           (lambda ()
-             (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
+          (lambda ()
+            (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
 (add-hook 'c-mode-hook
-           (lambda ()
-             (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
+          (lambda ()
+            (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file)))
 
 ;; Auto-complete [Company mode]
 (require 'company-auctex)
@@ -305,6 +305,14 @@
 ;; Always start smartparens mode in racket-mode.
 (add-hook 'racket-repl-mode #'smartparens-mode)
 (smartparens-global-mode t)
+(require 'racket-xp)
+(add-hook 'racket-mode-hook #'racket-xp-mode)
+;; Remove error pre-display
+;; (add-hook 'racket-xp-mode-hook
+;;           (lambda ()
+;;             (remove-hook 'pre-redisplay-functions
+;;                          #'racket-xp-pre-redisplay
+;;                          t)))
 
 ;; Move selected region (or line) up/down
 (defun move-text-internal (arg)
@@ -357,9 +365,9 @@
 
 ;; Source: https://www.emacswiki.org/emacs/misc-cmds.el
 (defun revert-buffer-no-confirm ()
-    "Revert buffer without confirmation."
-    (interactive)
-    (revert-buffer :ignore-auto :noconfirm))
+  "Revert buffer without confirmation."
+  (interactive)
+  (revert-buffer :ignore-auto :noconfirm))
 
 (setenv "PATH" (concat "/Library/TeX/texbin:"
                        (getenv "PATH")))
