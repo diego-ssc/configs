@@ -92,6 +92,10 @@
     (start-process urxvt nil urxvt "-cd" (projectile-project-root))))
 (global-set-key (kbd "C-c t") 'urxvt)
 
+;; 50 character limit.
+(add-hook 'text-mode-hook #'auto-fill-mode)
+(setq-default fill-column 80)
+(add-hook 'prog-mode-hook #'auto-fill-mode)
 
 ;; To-Do List Bind
 (set-register ?a '(file . "~/Documentos/ToDo.org"))
