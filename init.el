@@ -98,6 +98,7 @@
 (add-hook 'prog-mode-hook #'auto-fill-mode)
 
 ;; To-Do List Bind
+;; C-x r j a
 (set-register ?a '(file . "~/Documentos/ToDo.org"))
 
 ;; Load evil-mode
