@@ -152,6 +152,9 @@
 
 ;; (setq neo-autorefresh t)
 
+;; Prevent using UI dialogs for prompts
+(setq use-dialog-box nil)
+
 ;; Kill whole-line, copying it to clipboard
 ;; Sets `C-c d` to `M-x kill-whole-line`
 (global-set-key (kbd "C-c d") 'kill-whole-line)
