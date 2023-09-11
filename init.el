@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(hlinum iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -56,6 +56,7 @@
  '(jdee-font-lock-package-face ((t (:foreground "#928a7e"))))
  '(jdee-font-lock-private-face ((t (:foreground "#ffffff" :weight bold))))
  '(jdee-font-lock-public-face ((t (:foreground "#ffffff" :weight bold))))
+ '(line-number-current-line ((t (:background "gray8" :foreground "light gray"))))
  '(neo-banner-face ((t (:foreground "#c0c5ce" :weight bold))))
  '(neo-dir-link-face ((t (:foreground "#ffffff" :weight bold))))
  '(neo-file-link-face ((t (:foreground "#c0c5c7"))))
@@ -400,6 +401,10 @@
 
 ;; Notes:
 ;; Change colors: (C-u C-x =) of selected region
+;; Iedit: (C-;)
+;; Reload init.el : (M-x load-file ~/.emacs.d/init.el)
+;; Auto remove packages : (M-x package-autoremove)
+;; See currently defined faces: (M-x list-faces-display)
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
