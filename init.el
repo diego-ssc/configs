@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -59,6 +59,11 @@
  '(neo-banner-face ((t (:foreground "#c0c5ce" :weight bold))))
  '(neo-dir-link-face ((t (:foreground "#ffffff" :weight bold))))
  '(neo-file-link-face ((t (:foreground "#c0c5c7"))))
+ '(org-agenda-date ((t (:foreground "white"))))
+ '(org-agenda-date-weekend ((t (:foreground "white" :weight bold))))
+ '(org-agenda-structure ((t (:foreground "white"))))
+ '(org-headline-done ((t (:foreground "dark gray"))))
+ '(org-todo ((t (:foreground "wheat" :weight bold))))
  '(term-color-bright-cyan ((t (:background "#ffffff" :foreground "#ffffff"))))
  '(term-color-bright-green ((t (:background "#928a7e" :foreground "#928a7e"))))
  '(term-color-bright-red ((t (:background "#ffffff" :foreground "#ffffff"))))
@@ -246,6 +251,18 @@
 (add-hook 'org-mode-hook #'org-modern-mode)
 (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 (require 'org-superstar)
+;; Agenda
+(setq calendar-date-style 'european)
+(setq calendar-week-start-day 1)
+(setq org-agenda-files '("~/Documentos/ToDo.org"))
+;; Diary
+(setq diary-file "~/Documentos/diary.org")
+(setq org-agenda-diary-file "~/Documentos/diary.org")
+(setq org-agenda-include-diary t)
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+;; iedit
+(require 'iedit)
 
 (setq
  ;; Edit settings
@@ -380,6 +397,9 @@
 (setenv "PATH" (concat "/Library/TeX/texbin:"
                        (getenv "PATH")))
 (add-to-list 'exec-path "/Library/TeX/texbin")
+
+;; Notes:
+;; Change colors: (C-u C-x =) of selected region
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
