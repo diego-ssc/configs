@@ -1,5 +1,5 @@
 # Preview
-![plot](../Documentos/desktop.png)
+![plot](./images/desktop.png)
 
 # Paths
 
