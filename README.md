@@ -1,3 +1,6 @@
+# Preview
+![plot](../Documentos/desktop.png)
+
 # Paths
 
 ```
