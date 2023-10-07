@@ -105,7 +105,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --xF86XK_AudioRaiseVolume
 
     -- launch dmenu
-    , ((modm,               xK_s     ), spawn "dmenu_run")
+    , ((modm,               xK_s     ), spawn "dmenu_run -x 10 -y 10 -w 1900 -h 20 -nb gray6 -nf \"#aaaaaa\" -sb grey20")
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_s     ), spawn "gmrun")
@@ -331,7 +331,7 @@ myStartupHook = do
 
 ------------------------------------------------------------------------
 -- Command to launch the bar.
-myBar = "xmobar -A 160 -with_xpm"
+myBar = "xmobar -A 160"
 
 -- Custom PP, configure it as you like. It determines what is being written to
 -- the bar.

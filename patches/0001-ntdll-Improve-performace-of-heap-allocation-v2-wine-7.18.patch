@@ -1,0 +1,25 @@
+diff --git a/dlls/ntdll/heap.c b/dlls/ntdll/heap.c
+index ef91096..f15fcb2 100644
+--- a/dlls/ntdll/heap.c
++++ b/dlls/ntdll/heap.c
+@@ -555,7 +555,9 @@ static void heap_dump( const struct heap *heap )
+                large->data_size, LIST_ENTRY( large->entry.prev, ARENA_LARGE, entry ), LIST_ENTRY( large->entry.next, ARENA_LARGE, entry ) );
+     }
+ 
+-    if (heap->pending_free)
++    /* Patch. Replace pArena->size for large->block_size. */
++    if (heap->pending_free && ((large->block_size & ARENA_SIZE_MASK) < 0x1000 ||
++                               (heap->flags & HEAP_FREE_CHECKING_ENABLED) || RUNNING_ON_VALGRIND))
+     {
+         TRACE( "  pending blocks: %p\n", heap->pending_free );
+         for (i = 0; i < MAX_FREE_PENDING; ++i)
+@@ -1350,8 +1352,7 @@ static void heap_set_debug_flags( HANDLE handle )
+         }
+     }
+ 
+-    if ((heap->flags & HEAP_GROWABLE) && !heap->pending_free &&
+-        ((flags & HEAP_FREE_CHECKING_ENABLED) || RUNNING_ON_VALGRIND))
++    if ((heap->flags & HEAP_GROWABLE) && !heap->pending_free)
+     {
+         heap->pending_free = RtlAllocateHeap( handle, HEAP_ZERO_MEMORY,
+                                               MAX_FREE_PENDING * sizeof(*heap->pending_free) );
