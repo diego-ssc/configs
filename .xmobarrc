@@ -1,25 +1,34 @@
-Config { 
+Config {
 
    -- appearance | Source Code Pro 10 Bitstream Vera Sans Mono 8 8
-     font =         "Font Awesome 5 Free Solid 8"
+     font =         "Roboto 9"
+   , additionalFonts = ["Roboto 8", "Font Awesome 6 Free Solid 8",
+                        "Mononoki Nerd Font 10"]
    , bgColor =      "black"
-   , fgColor =      "#646464"
-   , position =     Top
-   , border =       BottomB
-   , borderColor =  "#646464"
+   , fgColor =      "#aaaaaa"
+   , position = Static { xpos = 10 , ypos = 10, width = 1900, height = 20 }
+   , border= NoBorder
+   -- Root directory of xpm icons
+   -- Note:
+   -- Use /home/user; not '~'
+   -- , iconRoot = "/home/diego/.xmonad/xmobar/icons/"
+   -- Usage:
+   -- <icon=volume-mid.xpm/>
 
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template =  "%StdinReader% }{ %date% | %alsa:default:Master% | %kbd%"
+   , template =  "  λ  %StdinReader% }{  %date% | %alsa:default:Master% | %kbd%"
+
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
    , hideOnStart =      False   -- start with window unmapped (hidden)
-   , allDesktops =      True    -- show on all desktops
+   , allDesktops =      False    -- show on all desktops
    , overrideRedirect = True    -- set the Override Redirect flag (Xlib)
    , pickBroadest =     False   -- choose widest display (multi-monitor)
-   , persistent =       False    -- enable/disable hiding (True = disabled)
+   , persistent =       False   -- enable/disable hiding (True = disabled)
 
+    -- , iconOffset = -1
    -- plugins
    --   Numbers can be automatically colored according to their value. xmobar
    --   decides color based on a three-tier/two-cutoff system, controlled by
@@ -34,7 +43,7 @@ Config {
    --   The --template option controls how the plugin is displayed. Text
    --   color can be set by enclosing in <fc></fc> tags. For more details
    --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
-   , commands = 
+   , commands =
 
 	-- StdinReader
 	[ Run StdinReader
@@ -58,18 +67,24 @@ Config {
 
         -- , Run Volume "default" "Master" [] 10
         -- No delay volume indicator
-        , Run Alsa "default" "Master" ["--template", "Volume: <volume>%" 
-                                      ]
-        
-        -- time and date indicator 
-        --   (%F = y-m-d date, %a = day of week, %T = h:m:s time)
-        -- , Run Date           "<fc=#FFFFFF>%F [%a] %T</fc>" "date" 10 -- #ABABAB
-	, Run Date "%a %_d %b %Y | <fc=#ffffff>%H:%M:%S</fc>" "date" 10
+        , Run Alsa
+          "default" "Master" ["--template", "  <status> <volume>%  "
+                             , "--", "-O", "", "-o", "(mute)"
+                             , "-C", "#aaaaaa"
+                             , "-h"      , "<fn=3>\xf028</fn>    "
+                             , "-m"        , "<fn=3>\xf028</fn>    "
+                             , "-l"      , "<fn=3>\xf027</fn>    "
+                             ]
+
+        -- time and date indicator
+	, Run Date
+          "<fn=3>\xeab0</fn>    <fn=1>%a %b %_d %Y</fn>    |    <fn=3>\xe641</fn>    <fn=1><fc=#ffffff>%H:%M:%S</fc></fn>    " "date" 10
 
         -- keyboard layout indicator
-        , Run Kbd            [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
-                             , ("us"         , "US")
-                             , ("latam"         , "ES")
-                             ]			     
+        , Run Kbd
+          [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
+          , ("us"         , "    US    ")
+          , ("latam"         , "    ES    ")
+          ]
         ]
    }

@@ -41,6 +41,7 @@
  '(compilation-info ((t (:foreground "#ffffff" :weight bold))))
  '(compilation-mode-line-exit ((t (:inherit compilation-info :foreground "#ffffff" :weight bold))))
  '(compilation-mode-line-fail ((t (:weight bold :foreground "#928a7e" :inherit compilation-error))))
+ '(fill-column-indicator ((t (:foreground "dim gray"))))
  '(flycheck-error-list-info ((t (:foreground "#ffffff"))))
  '(font-latex-bold-face ((t (:foreground "#c0c5ce" :inherit bold))))
  '(font-latex-italic-face ((t (:foreground "#c0c5ce" :inherit italic))))
@@ -75,7 +76,8 @@
  '(term-color-cyan ((t (:background "#928a7e" :foreground "#928a7e"))))
  '(term-color-green ((t (:background "#928a7e" :foreground "#928a7e"))))
  '(term-color-red ((t (:background "#ffffff" :foreground "#ffffff"))))
- '(term-color-yellow ((t (:background "#ffffff" :foreground "#ffffff")))))
+ '(term-color-yellow ((t (:background "#ffffff" :foreground "#ffffff"))))
+ '(whitespace-line ((t (:background "gray20" :foreground "#aaaaaa")))))
 ;; Windmove keybindings
 (windmove-default-keybindings 's)
 
@@ -112,7 +114,11 @@
 (add-hook 'lisp-mode-hook       #'auto-fill-mode)
 (add-hook 'perl-mode-hook       #'auto-fill-mode)
 (add-hook 'sh-mode-hook         #'auto-fill-mode)
-
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+(setq-default
+ whitespace-line-column 80
+ whitespace-style       '(face lines-tail))
+(add-hook 'prog-mode-hook #'whitespace-mode)
 
 ;; To-Do List Bind
 ;; C-x r j a

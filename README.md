@@ -8,6 +8,7 @@
 ~/.xinitrc
 ~/.xmobarrc
 ~/.xmonad/xmonad.hs
+~/.xmonad/xmobar/icons/
 ~/.Xresources
 ~/.inputrc
 /boot/loader/loader.conf

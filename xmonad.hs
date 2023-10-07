@@ -26,6 +26,20 @@ import XMonad.ManageHook
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Spacing
 
+import XMonad.Hooks.StatusBar
+import XMonad.Util.NamedScratchpad
+import XMonad.Actions.CycleWS
+import XMonad.Actions.TiledWindowDragging
+import qualified XMonad.Actions.FlexibleResize as Flex
+import XMonad.Actions.UpdatePointer (updatePointer)
+import XMonad.Actions.OnScreen (onlyOnScreen)
+import XMonad.Actions.Warp (warpToScreen)
+import Data.Maybe (fromJust)
+import XMonad.Layout.IndependentScreens
+import XMonad.Util.Loggers
+import XMonad.Layout.NoBorders
+import XMonad.Layout.Renamed
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -83,9 +97,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- , ((modm,               xK_r     ), spawn "urxvt &")
 
     -- volume keys
-    , ((0, 0x1008dd12), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")--xF86XK_AudioMute
-    , ((0, 0x1008ff11), spawn "pactl set-sink-volume @DEFAULT_SINK@ -4%")--xF86XK_AudioLowerVolume
-    , ((0, 0x1008ff13), spawn "pactl set-sink-volume @DEFAULT_SINK@ +4%")--xF86XK_AudioRaiseVolume
+    , ((0, 0x1008dd12), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+    --xF86XK_AudioMute
+    , ((0, 0x1008ff11), spawn "pactl set-sink-volume @DEFAULT_SINK@ -4%")
+    --xF86XK_AudioLowerVolume
+    , ((0, 0x1008ff13), spawn "pactl set-sink-volume @DEFAULT_SINK@ +4%")
+    --xF86XK_AudioRaiseVolume
 
     -- launch dmenu
     , ((modm,               xK_s     ), spawn "dmenu_run")
@@ -151,10 +168,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
 
     -- Restart xmonad
-    -- , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    -- , ((modm              , xK_q     ),
+    -- spawn "xmonad --recompile; xmonad --restart")
 
-    -- Run xmessage with a summary of the default keybindings (useful for beginners)
-    , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
+    -- Run xmessage with a summary of the default keybindings (useful for
+    -- beginners)
+    , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++
+                                               "\" | xmessage -file -"))
 
     -- Take screenshot
     , ((0, 0xff61), spawn "maim ~/screenshots/$(date +%s).png")
@@ -208,7 +228,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --
     [((modm, xK_v), spawn "vimb")]
 
-
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
 --
@@ -239,10 +258,13 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled  ||| Mirror tiled ||| Full  --tabbed shrinkText (theme adwaitaDarkTheme)
+myLayout = avoidStruts (tiled  ||| Mirror tiled ||| full)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+     tiled   = renamed [Replace "Tall"]
+               $ spacingRaw False (Border 0 0 0 0)
+               True (Border 10 10 10 10) True
+               $ Tall nmaster delta ratio
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -252,6 +274,12 @@ myLayout = tiled  ||| Mirror tiled ||| Full  --tabbed shrinkText (theme adwaitaD
 
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
+
+     -- Custom fullscreen with no borders
+     full   = renamed [Replace "Full"]
+              $ spacingRaw True (Border 0 0 0 0)
+              True (Border 10 10 10 10) True
+              $ noBorders (Full)
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -268,17 +296,8 @@ myLayout = tiled  ||| Mirror tiled ||| Full  --tabbed shrinkText (theme adwaitaD
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
--- myManageHook = composeAll
---     [ className =? "MPlayer"        --> doFloat
---     , className =? "Gimp"           --> doFloat
---     , resource  =? "desktop_window" --> doIgnore
---     , resource  =? "kdesktop"       --> doIgnore
---     --, resource  =? "terminator"     --> doRectFloat (W.RationalRect 0.25 0.25 0.5 0.5)
---     , resource  =? "glade-previewer" --> doFloat
---     , resource  =? "proyecto1" --> doFloat
---     , resource  =? "music_player" --> doFloat
---     , isFullscreen --> doFullFloat
---     , className =? "steam" --> doCenterFloat]
+myManageHook = composeAll
+    [isFullscreen --> doFullFloat]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -289,7 +308,7 @@ myLayout = tiled  ||| Mirror tiled ||| Full  --tabbed shrinkText (theme adwaitaD
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
--- myEventHook = 
+-- myEventHook =
 
 ------------------------------------------------------------------------
 -- Status bars and logging
@@ -312,18 +331,26 @@ myStartupHook = do
 
 ------------------------------------------------------------------------
 -- Command to launch the bar.
-myBar = "xmobar"
+myBar = "xmobar -A 160 -with_xpm"
 
--- Custom PP, configure it as you like. It determines what is being written to the bar.
-myPP = xmobarPP { ppCurrent = xmobarColor "#ffffff" "" . wrap " [" "] "
-                , ppTitle = xmobarColor "white" "" . shorten 100
-                , ppOrder  = \(ws : l : _ : _ ) -> [ws,l]
-                -- , ppTitle               = xmobarColor   "#ffffff" "#ffffff"
-                -- , ppUrgent              = xmobarColor   "#ffffff" "#ffffff"
-                , ppVisible = xmobarColor "gray" "" . wrap "  " "  "
-                , ppHidden = xmobarColor "gray" "" . wrap "  " "  "
-                -- , ppHiddenNoWindows     = xmobarColor   "#ffffff" "#ffffff"
-                }
+-- Custom PP, configure it as you like. It determines what is being written to
+-- the bar.
+myPP =  xmobarPP { ppCurrent = xmobarColor "#ffffff" "" . wrap "  " "  " -- " <fc=#f0f0f0,#101010>" "</fc> " -- " [" "] "
+                 , ppTitle = xmobarColor "white" "" . shorten 100
+                 , ppOrder  = \(ws : l : _ : _ ) -> [ws,l]
+                 , ppVisible = xmobarColor "gray" "" . wrap "  " "  "
+                 , ppHidden = xmobarColor "gray" "" . wrap "  " "  "
+                 , ppLayout = xmobarColor "gray" "" . wrap "  " "  "
+                 -- Icons instead of names.
+                 -- , ppLayout = xmobarColor "gray" "" . myLayoutPrinter
+                 }
+
+-- Converts the layout names to icons.
+myLayoutPrinter :: String -> String
+myLayoutPrinter "Full" = "<icon=/home/diego/.xmonad/xmobar/icons/full.xpm/>"
+myLayoutPrinter "Tall" = "<icon=/home/diego/.xmonad/xmobar/icons/tall.xpm/>"
+myLayoutPrinter "Mirror Tall" = "<icon=/home/diego/.xmonad/xmobar/icons/mirror_tall.xpm/>"
+myLayoutPrinter x = x
 
 -- Key binding to toggle the gap for the bar.
 toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
@@ -357,9 +384,10 @@ defaults = def {
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
-        layoutHook         = spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $ myLayout,--spacingWithEdge
-        -- manageHook         = fullscreenManageHook,
-        -- handleEventHook    = handleEventHook defaults <+> fullscreenEventHook,
+        layoutHook         = myLayout,
+        -- manageHook         = myManageHook,
+        -- handleEventHook    = handleEventHook defaults <+>
+        -- fullscreenEventHook,
         logHook            = myLogHook,
         startupHook        = myStartupHook
         } `removeKeys` [(controlMask, xK_Tab)]
