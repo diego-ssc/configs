@@ -412,6 +412,42 @@
   (interactive)
   (revert-buffer :ignore-auto :noconfirm))
 
+;; If 'word was used, words that contain the escape character '\' would be
+;; trimmed.
+;; Italic words binding LateX.
+(defun italic-word ()
+  "Italic word binding for LateX."
+  (interactive)
+  (if (thing-at-point 'sexp)
+      (save-excursion
+        (beginning-of-thing 'sexp)
+        (insert "\\textit{")
+        (end-of-thing 'sexp)
+        (insert "}"))
+    (progn
+      (insert "\\textit{")
+      (save-excursion
+        (insert "}")))))
+
+;; Bold words binding LateX.
+(defun bold-word ()
+  "Italic word binding for LateX."
+  (interactive)
+  (if (thing-at-point 'sexp)
+      (save-excursion
+        (beginning-of-thing 'sexp)
+        (insert "\\textbf{")
+        (end-of-thing 'sexp)
+        (insert "}"))
+    (progn
+      (insert "\\textbf{")
+      (save-excursion
+        (insert "}")))))
+
+(bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
+(bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
+
+
 (setenv "PATH" (concat "/Library/TeX/texbin:"
                        (getenv "PATH")))
 (add-to-list 'exec-path "/Library/TeX/texbin")
