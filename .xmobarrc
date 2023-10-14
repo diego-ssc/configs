@@ -6,7 +6,7 @@ Config {
                         "Mononoki Nerd Font 10"]
    , bgColor =      "black"
    , fgColor =      "#aaaaaa"
-   , position = Static { xpos = 10 , ypos = 10, width = 1346, height = 20 }
+   , position = Static { xpos = 10 , ypos = 10, width = 1900, height = 20 }
    , border= NoBorder
    -- Root directory of xpm icons
    -- Note:
@@ -18,7 +18,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template =  "  λ  %StdinReader% }{  %date% | %alsa:default:Master% | %battery% | %kbd%"
+   , template =  "  λ  %StdinReader% }{  %date% | %alsa:default:Master% | %kbd%" -- %battery%
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -49,24 +49,24 @@ Config {
 	[ Run StdinReader
 
         -- battery monitor
-        , Run Battery        [ "--template" , "  <acstatus>  "
-                             , "--Low"      , "10"        -- units: %
-                             , "--High"     , "80"        -- units: %
-                             , "--low"      , "#aaaaaa"
-                             , "--normal"   , "#aaaaaa"
-                             , "--high"     , "#aaaaaa"
+        -- , Run Battery        [ "--template" , "  <acstatus>  "
+        --                      , "--Low"      , "10"        -- units: %
+        --                      , "--High"     , "80"        -- units: %
+        --                      , "--low"      , "#aaaaaa"
+        --                      , "--normal"   , "#aaaaaa"
+        --                      , "--high"     , "#aaaaaa"
 
-                             , "--" -- battery specific options
-                                       -- discharging status
-                                       , "-o"	, "<left>%"
-                                       -- AC "on" status
-                                       , "-O"	, "<fc=#dAA520>Charging</fc>"
-                                       -- charged status
-                                       , "-i"	, "<fn=3>\xf240</fn>     "
-                                       , "--lows", "<fn=3>\xf243</fn>     "
-                                       , "--mediums", "<fn=3>\xf242</fn>     "
-                                       , "--highs", "<fn=3>\xf241</fn>     "
-                             ] 50
+        --                      , "--" -- battery specific options
+        --                                -- discharging status
+        --                                , "-o"	, "<left>%"
+        --                                -- AC "on" status
+        --                                , "-O"	, "<fc=#dAA520>Charging</fc>"
+        --                                -- charged status
+        --                                , "-i"	, "<fn=3>\xf240</fn>     "
+        --                                , "--lows", "<fn=3>\xf243</fn>     "
+        --                                , "--mediums", "<fn=3>\xf242</fn>     "
+        --                                , "--highs", "<fn=3>\xf241</fn>     "
+        --                      ] 50
 
         -- , Run Volume "default" "Master" [] 10
         -- No delay volume indicator
