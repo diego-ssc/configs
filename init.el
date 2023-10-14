@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -447,6 +447,10 @@
 (bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
 (bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
 
+
+;; Multiple cursors
+(require 'multiple-cursors)
+(global-set-key (kbd "C-l") 'mc/edit-lines)
 
 (setenv "PATH" (concat "/Library/TeX/texbin:"
                        (getenv "PATH")))
