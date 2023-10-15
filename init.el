@@ -342,8 +342,10 @@
 (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
 (add-to-list 'company-backends 'company-c-headers)
 
-;; Racket
+;; Smartparens
 (require 'smartparens-config)
+(sp-pair "`" nil :actions :rem)
+(sp-local-pair 'java-mode  "/*" "*/")
 
 ;; Always start smartparens mode in racket-mode.
 (add-hook 'racket-repl-mode #'smartparens-mode)
