@@ -18,6 +18,8 @@
 /etc/ly/config.ini
 /etc/lf/lfrc
 /usr/lib/urxvt/perL/pasta
+/etc/X11/xorg.conf
+/etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 ```
 
 # Dependencies
