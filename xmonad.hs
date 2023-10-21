@@ -105,7 +105,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --xF86XK_AudioRaiseVolume
 
     -- launch dmenu
-    , ((modm,               xK_s     ), spawn "dmenu_run -x 10 -y 10 -w 1900 -h 20 -nb gray6 -nf \"#aaaaaa\" -sb grey20 -fn \"source code pro-8\"")
+    , ((modm,               xK_s     ), spawn "dmenu_run -x 10 -y 10 -w 1900 -h 20 -nb gray6 -nf \"#aaaaaa\" -sb grey20")
+    -- -fn \"source code pro-8\"
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_s     ), spawn "gmrun")
@@ -177,7 +178,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
                                                "\" | xmessage -file -"))
 
     -- Take screenshot
-    , ((0, 0xff61), spawn "maim ~/screenshots/$(date +%s).png")
+    , ((0, 0xff61), spawn "maim -i $(xdotool getactivewindow) ~/screenshots/$(date +%s).png")
 
     -- Take selection screenshot
     , ((controlMask .|. shiftMask, xK_s), spawn "maim -s -u ~/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i")
