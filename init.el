@@ -420,12 +420,14 @@
 (defun italic-word ()
   "Italic word binding for LateX."
   (interactive)
-  (if (thing-at-point 'sexp)
-      (save-excursion
-        (beginning-of-thing 'sexp)
-        (insert "\\textit{")
-        (end-of-thing 'sexp)
-        (insert "}"))
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "\\textit{"))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "}")))
     (progn
       (insert "\\textit{")
       (save-excursion
@@ -435,20 +437,38 @@
 (defun bold-word ()
   "Italic word binding for LateX."
   (interactive)
-  (if (thing-at-point 'sexp)
-      (save-excursion
-        (beginning-of-thing 'sexp)
-        (insert "\\textbf{")
-        (end-of-thing 'sexp)
-        (insert "}"))
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "\\textbf{"))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "}")))
     (progn
       (insert "\\textbf{")
       (save-excursion
         (insert "}")))))
 
+(defun code-word ()
+  "Italic word binding for LateX."
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "\\texttt{"))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "}")))
+    (progn
+      (insert "\\texttt{")
+      (save-excursion
+        (insert "}")))))
+
 (bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
 (bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
-
+(bind-key  (kbd "M-o t") #'code-word LaTeX-mode-map)
 
 ;; Multiple cursors
 (require 'multiple-cursors)
