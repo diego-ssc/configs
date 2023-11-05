@@ -103,7 +103,16 @@
   (interactive)
   (let ((urxvt "urxvt"))
     (start-process urxvt nil urxvt "-cd" (projectile-project-root))))
+
 (global-set-key (kbd "C-c t") 'urxvt)
+
+(defun urxvt-dir ()
+  (interactive)
+  (let ((urxvt "urxvt"))
+    (start-process urxvt nil urxvt "-cd"
+                   (file-name-directory (or buffer-file-name load-file-name)))))
+
+(global-set-key (kbd "C-c y") 'urxvt-dir)
 
 ;; 80 character limit.
 (add-hook 'text-mode-hook #'auto-fill-mode)
