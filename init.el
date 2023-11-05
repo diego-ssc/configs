@@ -49,6 +49,7 @@
  '(font-latex-script-char-face ((t (:foreground "#c0c5ce"))))
  '(font-latex-sectioning-2-face ((t (:foreground "#ffffff" :weight bold :height 1.1))))
  '(font-latex-sectioning-3-face ((t (:foreground "#ffffff" :weight bold))))
+ '(font-latex-sectioning-4-face ((t (:foreground "#ffffff" :weight bold))))
  '(font-latex-warning-face ((t (:foreground "#c0c5ce" :inherit bold))))
  '(font-lock-string-face ((t (:foreground "#928a7e"))))
  '(font-lock-type-face ((t (:foreground "#c0c5ce"))))
@@ -451,7 +452,7 @@
         (insert "}")))))
 
 (defun code-word ()
-  "Italic word binding for LateX."
+  "Code word binding for LateX."
   (interactive)
   (if (use-region-p)
       (progn
@@ -465,6 +466,22 @@
       (insert "\\texttt{")
       (save-excursion
         (insert "}")))))
+
+(defun lr-vert ()
+  "Left-right vector word binding for LateX."
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "\\lvert"))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "\\rvert")))
+    (progn
+      (insert "\\lvert")
+      (save-excursion
+        (insert "\\rvert")))))
 
 (bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
 (bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
