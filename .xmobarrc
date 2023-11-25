@@ -81,7 +81,7 @@ Config {
 
         -- time and date indicator
 	, Run Date
-          "<fn=1>%a %b %_d %Y</fn>    |    <fn=1><fc=#ffffff>%H:%M:%S</fc></fn>           " "date" 10 -- <fn=3>\xeab0</fn> <fn=3>\xe641</fn>
+          "<fn=1>%a %b %_d %Y</fn>    |    <fn=1><fc=#ffffff>%H:%M:%S</fc></fn>            " "date" 10 -- <fn=3>\xeab0</fn> <fn=3>\xe641</fn>
 
         -- keyboard layout indicator
         , Run Kbd
