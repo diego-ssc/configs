@@ -298,7 +298,8 @@ myLayout = avoidStruts (tiled  ||| Mirror tiled ||| full)
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [isFullscreen --> doFullFloat]
+    [isFullscreen --> doFullFloat
+    , title     =? "Zoom - Free Account" --> doFloat]
 
 ------------------------------------------------------------------------
 -- Event handling

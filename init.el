@@ -476,6 +476,22 @@
       (save-excursion
         (insert "}")))))
 
+(defun sc-word ()
+  "Code word binding for LateX."
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "\\textsc{"))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "}")))
+    (progn
+      (insert "\\textsc{")
+      (save-excursion
+        (insert "}")))))
+
 (defun lr-vert ()
   "Left-right vector word binding for LateX."
   (interactive)
@@ -495,6 +511,7 @@
 (bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
 (bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
 (bind-key  (kbd "M-o t") #'code-word LaTeX-mode-map)
+(bind-key  (kbd "M-o s") #'sc-word LaTeX-mode-map)
 
 ;; Multiple cursors
 (require 'multiple-cursors)
