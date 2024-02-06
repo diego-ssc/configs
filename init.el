@@ -510,10 +510,27 @@
       (save-excursion
         (insert "\\rvert")))))
 
+(defun math-mode-inline ()
+  "Inline math mode binding for LaTeX."
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "$"))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "$")))
+    (progn
+      (insert "$")
+      (save-excursion
+        (insert "$")))))
+
 (bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
 (bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
 (bind-key  (kbd "M-o t") #'code-word LaTeX-mode-map)
 (bind-key  (kbd "M-o s") #'sc-word LaTeX-mode-map)
+(bind-key  (kbd "$") #'math-mode-inline LaTeX-mode-map)
 
 ;; Multiple cursors
 (require 'multiple-cursors)
