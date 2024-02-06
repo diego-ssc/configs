@@ -5,22 +5,56 @@
 
 ```
 /boot/loader/loader.conf
+```
+```
 ~/.bashrch
+```
+```
 ~/.emacs.d/init.el
+```
+```
+~/.emacs.d/spanish-prefix.el
+```
+```
 ~/.emacs.d/Lambda-theme.el
+```
+```
 ~/.xinitrc
+```
+```
 ~/.xmobarrc
+```
+```
 ~/.xmonad/xmonad.hs
+```
+```
 ~/.xmonad/xmobar/icons/
+```
+```
 ~/.Xresources
+```
+```
 ~/.inputrc
+```
+```
 /boot/loader/loader.conf
+```
+```
 /etc/ly/config.ini
+```
+```
 /etc/lf/lfrc
+```
+```
 /usr/lib/urxvt/perL/pasta
+```
+```
 /etc/X11/xorg.conf
+```
+```
 /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 ```
+
 
 # Dependencies
 
