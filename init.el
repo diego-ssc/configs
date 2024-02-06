@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(org-fragtog sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -288,7 +288,10 @@
 (setq org-agenda-diary-file "~/Documentos/diary.org")
 (setq org-agenda-include-diary t)
 (global-set-key (kbd "C-c a") 'org-agenda)
-
+(require 'org)
+(require 'ox-latex)
+(setq org-latex-create-formula-image-program 'dvipng)
+(org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
 ;; iedit
 (require 'iedit)
 
@@ -531,6 +534,7 @@
 (bind-key  (kbd "M-o t") #'code-word LaTeX-mode-map)
 (bind-key  (kbd "M-o s") #'sc-word LaTeX-mode-map)
 (bind-key  (kbd "$") #'math-mode-inline LaTeX-mode-map)
+(bind-key  (kbd "$") #'math-mode-inline org-mode-map)
 
 ;; Multiple cursors
 (require 'multiple-cursors)
@@ -552,8 +556,9 @@
 (define-key org-mode-map [C-S-left] 'org-shiftmetaleft)
 (define-key org-mode-map [C-right] 'org-metaright)
 (define-key org-mode-map [C-left] 'org-metaleft)
-(define-key org-mode-map [C-S-return] 'org-insert-todo-heading)
-
+(define-key org-mode-map [S-return] 'org-insert-todo-heading)
+(texfrag-global-mode t)
+(add-hook 'org-mode-hook 'org-fragtog-mode)
 
 ;; Input Method for accents
 ;; (setq default-input-method "latin-1-prefix")
@@ -588,6 +593,15 @@
 (add-hook 'LaTeX-mode-hook 'inactivate-default-input-method)
 ;; Used by Emacs' built-in LaTeX mode.
 (add-hook 'latex-mode-hook 'inactivate-default-input-method)
+(add-hook 'org-mode-hook
+  (lambda ()
+    (texfrag-mode)
+  ))
+
+(add-to-list 'org-latex-packages-alist
+             '("" "tikz" t))
+(eval-after-load "preview"
+  '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
 
 ;; Notes:
 ;; Change colors: (C-u C-x =) of selected region
@@ -599,6 +613,8 @@
 ;; Upcase word: M-u
 ;; Downcase region: C-x C-l
 ;; Downcase word: M-l
+;; LaTeX preview org-mode: C-c C-x C-l
+;; LaTeX preview org-mode: C-c C-p C-p
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
