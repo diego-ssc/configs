@@ -584,6 +584,10 @@
 (add-hook 'perl-mode-hook 'activate-default-input-method)
 (add-hook 'sh-mode-hook 'activate-default-input-method)
 (add-hook 'prog-mode-hook 'activate-default-input-method)
+;; Used by AUCTeX's LaTeX mode.
+(add-hook 'LaTeX-mode-hook 'inactivate-default-input-method)
+;; Used by Emacs' built-in LaTeX mode.
+(add-hook 'latex-mode-hook 'inactivate-default-input-method)
 
 ;; Notes:
 ;; Change colors: (C-u C-x =) of selected region
