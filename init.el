@@ -543,12 +543,17 @@
 (require 'sweeprolog)
 
 (define-key org-mode-map (kbd "<M-up>") nil)
-
 (define-key org-mode-map (kbd "<M-down>") nil)
-
 (define-key org-mode-map (kbd "<M-left>") nil)
-
 (define-key org-mode-map (kbd "<M-right>") nil)
+(define-key org-mode-map (kbd "<M-S-left>") nil)
+(define-key org-mode-map (kbd "<M-S-right>") nil)
+(define-key org-mode-map [C-S-right] 'org-shiftmetaright)
+(define-key org-mode-map [C-S-left] 'org-shiftmetaleft)
+(define-key org-mode-map [C-right] 'org-metaright)
+(define-key org-mode-map [C-left] 'org-metaleft)
+(define-key org-mode-map [C-S-return] 'org-insert-todo-heading)
+
 
 ;; Input Method for accents
 ;; (setq default-input-method "latin-1-prefix")
