@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 (custom-set-faces
@@ -355,6 +355,8 @@
 ;; Smartparens
 (require 'smartparens-config)
 (sp-pair "`" nil :actions :rem)
+(sp-pair "'" nil :actions :rem)
+(sp-pair "~" nil :actions :rem)
 (sp-local-pair 'java-mode  "/*" "*/")
 
 ;; Always start smartparens mode in racket-mode.
@@ -521,14 +523,59 @@
                        (getenv "PATH")))
 (add-to-list 'exec-path "/Library/TeX/texbin")
 
+(require 'sweeprolog)
+
+(define-key org-mode-map (kbd "<M-up>") nil)
+
+(define-key org-mode-map (kbd "<M-down>") nil)
+
+(define-key org-mode-map (kbd "<M-left>") nil)
+
+(define-key org-mode-map (kbd "<M-right>") nil)
+
+;; Input Method for accents
+;; (setq default-input-method "latin-1-prefix")
+;; (defun activate-default-input-method ()
+;;   (interactive)
+;;   (activate-input-method default-input-method))
+;; (add-hook 'org-mode-hook 'activate-default-input-method)
+;; (add-hook 'text-mode-hook 'activate-default-input-method)
+;; (add-hook 'c-mode-common-hook 'activate-default-input-method)
+;; (add-hook 'emacs-lisp-mode-hook 'activate-default-input-method)
+;; (add-hook 'java-mode-hook 'activate-default-input-method)
+;; (add-hook 'lisp-mode-hook 'activate-default-input-method)
+;; (add-hook 'perl-mode-hook 'activate-default-input-method)
+;; (add-hook 'sh-mode-hook 'activate-default-input-method)
+;; (add-hook 'prog-mode-hook 'activate-default-input-method)
+
+(load-file "~/.emacs.d/spanish-prefix.el")
+(setq default-input-method "Spanish-prefix")
+(defun activate-default-input-method ()
+  (interactive)
+  (activate-input-method default-input-method))
+(add-hook 'org-mode-hook 'activate-default-input-method)
+(add-hook 'text-mode-hook 'activate-default-input-method)
+(add-hook 'c-mode-common-hook 'activate-default-input-method)
+(add-hook 'emacs-lisp-mode-hook 'activate-default-input-method)
+(add-hook 'java-mode-hook 'activate-default-input-method)
+(add-hook 'lisp-mode-hook 'activate-default-input-method)
+(add-hook 'perl-mode-hook 'activate-default-input-method)
+(add-hook 'sh-mode-hook 'activate-default-input-method)
+(add-hook 'prog-mode-hook 'activate-default-input-method)
+
 ;; Notes:
 ;; Change colors: (C-u C-x =) of selected region
 ;; Iedit: (C-;)
 ;; Reload init.el : (M-x load-file ~/.emacs.d/init.el)
 ;; Auto remove packages : (M-x package-autoremove)
 ;; See currently defined faces: (M-x list-faces-display)
+;; Upcase region: C-x C-u
+;; Upcase word: M-u
+;; Downcase region: C-x C-l
+;; Downcase word: M-l
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
 (put 'narrow-to-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
