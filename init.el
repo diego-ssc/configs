@@ -294,18 +294,20 @@
 (org-babel-do-load-languages 'org-babel-load-languages '((latex . t)))
 ;; iedit
 (require 'iedit)
+(org-toggle-pretty-entities)
 
 (setq
  ;; Edit settings
  org-auto-align-tags nil
  org-tags-column 0
- org-catch-invisible-edits 'show-and-error
- org-special-ctrl-a/e t
- org-insert-heading-respect-content t
+ ;; org-catch-invisible-edits 'show-and-error
+ ;; org-special-ctrl-a/e t
+ ;; org-insert-heading-respect-content t
+
 
  ;; Org styling, hide markup etc.
- org-hide-emphasis-markers t
- org-pretty-entities t
+ ;; org-hide-emphasis-markers t
+ ;; org-pretty-entities t
  org-ellipsis "…"
 
  ;; Agenda styling
@@ -513,6 +515,22 @@
       (save-excursion
         (insert "\\rvert")))))
 
+(defun math-mode ()
+  "Left-right vector word binding for LateX."
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (save-excursion
+        (goto-char (region-beginning))
+        (insert "\\["))
+        (save-excursion
+          (goto-char (region-end))
+          (insert "\\]")))
+    (progn
+      (insert "\\[")
+      (save-excursion
+        (insert "\\]")))))
+
 (defun math-mode-inline ()
   "Inline math mode binding for LaTeX."
   (interactive)
@@ -529,12 +547,18 @@
       (save-excursion
         (insert "$")))))
 
+(defun backslash ()
+  "Defines '\\' for org mode."
+  (interactive)
+  (insert "\\"))
+
 (bind-key (kbd "M-o i") #'italic-word LaTeX-mode-map)
 (bind-key  (kbd "M-o b") #'bold-word LaTeX-mode-map)
 (bind-key  (kbd "M-o t") #'code-word LaTeX-mode-map)
 (bind-key  (kbd "M-o s") #'sc-word LaTeX-mode-map)
 (bind-key  (kbd "$") #'math-mode-inline LaTeX-mode-map)
 (bind-key  (kbd "$") #'math-mode-inline org-mode-map)
+(bind-key  (kbd "\\") #'backslash org-mode-map)
 
 ;; Multiple cursors
 (require 'multiple-cursors)
@@ -552,28 +576,25 @@
 (define-key org-mode-map (kbd "<M-right>") nil)
 (define-key org-mode-map (kbd "<M-S-left>") nil)
 (define-key org-mode-map (kbd "<M-S-right>") nil)
-(define-key org-mode-map [C-S-right] 'org-shiftmetaright)
-(define-key org-mode-map [C-S-left] 'org-shiftmetaleft)
+(define-key org-mode-map (kbd "<C-S-left>") nil)
+(define-key org-mode-map (kbd "<C-S-right>") nil)
 (define-key org-mode-map [C-right] 'org-metaright)
 (define-key org-mode-map [C-left] 'org-metaleft)
 (define-key org-mode-map [S-return] 'org-insert-todo-heading)
+(defadvice org-backward-paragraph
+    (before set-up-shift-select-backward-paragraph activate)
+  (interactive "^"))
+(defadvice org-forward-paragraph
+    (before set-up-shift-select-forward-paragraph activate)
+  (interactive "^"))
+
 (texfrag-global-mode t)
 (add-hook 'org-mode-hook 'org-fragtog-mode)
 
-;; Input Method for accents
-;; (setq default-input-method "latin-1-prefix")
-;; (defun activate-default-input-method ()
-;;   (interactive)
-;;   (activate-input-method default-input-method))
-;; (add-hook 'org-mode-hook 'activate-default-input-method)
-;; (add-hook 'text-mode-hook 'activate-default-input-method)
-;; (add-hook 'c-mode-common-hook 'activate-default-input-method)
-;; (add-hook 'emacs-lisp-mode-hook 'activate-default-input-method)
-;; (add-hook 'java-mode-hook 'activate-default-input-method)
-;; (add-hook 'lisp-mode-hook 'activate-default-input-method)
-;; (add-hook 'perl-mode-hook 'activate-default-input-method)
-;; (add-hook 'sh-mode-hook 'activate-default-input-method)
-;; (add-hook 'prog-mode-hook 'activate-default-input-method)
+(add-hook 'org-mode-hook
+  (lambda ()
+    (texfrag-mode)
+  ))
 
 (load-file "~/.emacs.d/spanish-prefix.el")
 (setq default-input-method "Spanish-prefix")
@@ -589,19 +610,34 @@
 (add-hook 'perl-mode-hook 'activate-default-input-method)
 (add-hook 'sh-mode-hook 'activate-default-input-method)
 (add-hook 'prog-mode-hook 'activate-default-input-method)
+(add-hook 'markdown-mode-hook 'activate-default-input-method)
 ;; Used by AUCTeX's LaTeX mode.
 (add-hook 'LaTeX-mode-hook 'inactivate-default-input-method)
 ;; Used by Emacs' built-in LaTeX mode.
 (add-hook 'latex-mode-hook 'inactivate-default-input-method)
-(add-hook 'org-mode-hook
-  (lambda ()
-    (texfrag-mode)
-  ))
 
 (add-to-list 'org-latex-packages-alist
              '("" "tikz" t))
 (eval-after-load "preview"
   '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+
+;; default mode-line
+;; (setq-default mode-line-format
+;;               '("%e" mode-line-front-space
+;;                 (:propertize
+;;                  ("" mode-line-mule-info mode-line-client mode-line-modified
+;;                   mode-line-remote)
+;;                  display (min-width (5.0)))
+;;                 mode-line-frame-identification mode-line-buffer-identification "   "
+;;                 mode-line-position (vc-mode vc-mode) "  " mode-line-modes
+;;                 mode-line-misc-info mode-line-end-spaces))
+(setq-default mode-line-format
+              '("%e" mode-line-front-space
+                (:propertize
+                 ("" mode-line-mule-info mode-line-client mode-line-modified
+                  mode-line-remote)
+                 display (min-width (5.0)))
+                mode-line-frame-identification mode-line-buffer-identification))
 
 ;; Notes:
 ;; Change colors: (C-u C-x =) of selected region
@@ -615,6 +651,12 @@
 ;; Downcase word: M-l
 ;; LaTeX preview org-mode: C-c C-x C-l
 ;; LaTeX preview org-mode: C-c C-p C-p
+;; org-insert-structure-template: C-c C-,
+;; C-h k -> M-x describe-key
+;; C-h f -> M-x describe-function
+;; C-h v -> M-x describe-variable
+;; C-h a -> M-x apropos-command
+;; C-h i -> M-x info
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
