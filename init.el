@@ -24,7 +24,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(org-fragtog sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(typescript-mode org-fragtog sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(send-mail-function 'mailclient-send-it)
  '(tool-bar-mode nil))
@@ -52,8 +52,12 @@
  '(font-latex-sectioning-3-face ((t (:foreground "#ffffff" :weight bold))))
  '(font-latex-sectioning-4-face ((t (:foreground "#ffffff" :weight bold))))
  '(font-latex-warning-face ((t (:foreground "#c0c5ce" :inherit bold))))
+ '(font-lock-builtin-face ((t (:foreground "#ffffff" :weight bold))))
+ '(font-lock-function-call-face ((t (:foreground "#ffffff" :weight bold))))
+ '(font-lock-function-name-face ((t (:foreground "#ffffff" :weight bold))))
+ '(font-lock-preprocessor-face ((t (:weight semi-bold))))
  '(font-lock-string-face ((t (:foreground "#928a7e"))))
- '(font-lock-type-face ((t (:foreground "#c0c5ce"))))
+ '(font-lock-type-face ((t (:foreground "#c0c5ce" :weight semi-bold))))
  '(jdee-font-lock-constant-face ((t (:foreground "#ffffff" :weight bold))))
  '(jdee-font-lock-modifier-face ((t (:foreground "#ffffff" :weight bold))))
  '(jdee-font-lock-package-face ((t (:foreground "#928a7e"))))
@@ -126,10 +130,6 @@
 (add-hook 'perl-mode-hook       #'auto-fill-mode)
 (add-hook 'sh-mode-hook         #'auto-fill-mode)
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-(setq-default
- whitespace-line-column 80
- whitespace-style       '(face lines-tail))
-(add-hook 'prog-mode-hook #'whitespace-mode)
 
 ;; To-Do List Bind
 ;; C-x r j a
@@ -363,7 +363,9 @@
 (sp-pair "`" nil :actions :rem)
 (sp-pair "'" nil :actions :rem)
 (sp-pair "~" nil :actions :rem)
-(sp-local-pair 'java-mode  "/*" "*/")
+(sp-local-pair 'java-mode  "/* " " */")
+(sp-local-pair 'typescript-mode  "/* " " */")
+
 
 ;; Always start smartparens mode in racket-mode.
 (add-hook 'racket-repl-mode #'smartparens-mode)
@@ -622,6 +624,10 @@
 (eval-after-load "preview"
   '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
 
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-hook 'typescript-mode-hook (lambda () (setq comment-start "/*"
+                                        comment-end   "*/")))
+
 ;; default mode-line
 ;; (setq-default mode-line-format
 ;;               '("%e" mode-line-front-space
@@ -658,6 +664,10 @@
 ;; C-h v -> M-x describe-variable
 ;; C-h a -> M-x apropos-command
 ;; C-h i -> M-x info
+
+(font-lock-add-keywords
+ 'c-mode
+ '(("\\<\\(\\sw+\\) ?(" 1 font-lock-function-name-face)))
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
