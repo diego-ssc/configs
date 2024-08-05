@@ -186,6 +186,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- , (xmonad $ def {} `removeKeys` (controlMask, xK_Tab))
     -- Clear terminal
     --, ((controlMask, xK_l), spawn "tput reset")
+    , ((modm, xK_m), spawn "thunderbird")
     ]
     ++
 

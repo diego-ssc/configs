@@ -16,6 +16,8 @@ alias atom='atom --no-sandbox'
 
 alias sioyek='sioyek --new-instance'
 
+export PS1="\[$(tput bold)\]\[$(tput setaf 15)\][\[$(tput setaf 15)\]\u\[$(tput setaf 15)\]@\[$(tput setaf 15)\]\h \[$(tput setaf 15)\]\W\[$(tput setaf 15)\]]\[$(tput setaf 15)\]\$ \[$(tput sgr0)\]"
+
 # set an ad-hoc GUI timer
 timer() {
   local N=$1; shift

@@ -33,7 +33,7 @@ discord.hintstyle: hintsnone
 *.color0:      #2b303b
 *.color8:      #65737e
 ! red
-*.color1:      #95e353
+*.color1:      #ffffff
 *.color9:      #bf616a
 ! green
 *.color2:      #928a7e
