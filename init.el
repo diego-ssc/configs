@@ -26,7 +26,7 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(company-emacs-eclim eclim anaconda-mode company-quickhelp tide typescript-mode org-fragtog sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
+   '(anaconda-mode company-quickhelp tide typescript-mode org-fragtog sweeprolog multiple-cursors iedit smartparens paredit racket-mode company-c-headers company-auctex crdt rust-mode dockerfile-mode projectile evil yaml-mode vala-mode org-tree-slide org-modern org-super-agenda org-superstar org-attach-screenshot org-autolist org-auto-expand org-appear org-alert org-agenda-property cff org ggtags meson-mode all-the-icons auto-complete neotree haskell-mode which-key auctex))
  '(scroll-bar-mode nil)
  '(send-mail-function 'mailclient-send-it)
  '(tab-width 4)
@@ -323,6 +323,9 @@
    " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
  org-agenda-current-time-string
  "⭠ now ─────────────────────────────────────────────────")
+
+(setq org-hide-emphasis-markers t)
+
 ;; Source code navigation
 (require 'ggtags)
 (add-hook 'c-mode-common-hook
@@ -715,18 +718,6 @@
 
 ;; (setq debug-on-error t)
 
-;; eclim
-(require 'eclim)
-(setq eclimd-autostart t)
-
-(defun my-java-mode-hook ()
-    (eclim-mode t))
-
-(add-hook 'java-mode-hook 'my-java-mode-hook)
-
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-(add-to-list 'company-backends 'company-emacs-eclim)
 
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
