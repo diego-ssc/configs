@@ -23,7 +23,7 @@ emacs --daemon &
 
 # Center on first monitor.
 # 1080/2 = 540
-# (1920 + 1920)/2 = 960
+# 1920/2 = 960
 xdotool mousemove 960 540 &
 
 # NUM key toggled

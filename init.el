@@ -623,6 +623,8 @@
 
 (add-to-list 'org-latex-packages-alist
              '("" "tikz" t))
+(setq org-startup-with-latex-preview t)
+
 (eval-after-load "preview"
   '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
 
