@@ -99,6 +99,9 @@ URxvt.keysym.Control-Shift-V    : perl:pasta:paste
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 
+!! Padding
+URxvt.internalBorder:  4
+
 !! clear terminal
 URxvt.keysym.Control-l: command:\033c
 

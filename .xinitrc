@@ -34,7 +34,7 @@ numlockx &
 ~/.fehbg &
 
 ### DWM
-while xsetroot -name "`date +"%H : %M : %S"` ; `date +"%b  %d  %Y"`    |    `amixer get Master | tail -n1| sed -r 's/.*\[(.*)%\].*/\1/'` % "
+while xsetroot -name "`date +"%H : %M : %S"` ; `date +"%b  %d"`    |    `amixer get Master | tail -n1 | sed -r 's/.*\[(.*)%\].*/\1/'` %   "
 do
  sleep 1
 done &
