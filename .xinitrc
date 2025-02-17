@@ -5,6 +5,8 @@
 #### Third monitor
 # xrandr --dpi 120 --auto --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rate 144 --output HDMI-0 --mode 1920x1080 --right-of DP-0 --rate 75 &
 xrandr --dpi 120 --auto --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rate 75 --output DP-0 --mode 1920x1080 --right-of HDMI-0 --rate 144 &
+# xrandr --dpi 120 --auto --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rate 75 --output DP-0 --mode 1920x1080 --right-of HDMI-0 --rate 75 &
+
 # xrandr --dpi 120 --auto --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rate 144 --output HDMI-0 --mode 1920x1080 --right-of DP-0 --rate 75 --output DVI-D-0 --same-as DP-0 &
 
 # 142
