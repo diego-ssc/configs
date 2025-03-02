@@ -808,35 +808,30 @@
 (put 'downcase-region 'disabled nil)
 
 ;; MAC
-(menu-bar-mode t)
-(setq
- mac-command-modifier 'super
- mac-option-modifier 'meta
- mac-control-modifier 'control
- mac-function-modifier 'hyper)
+;; (menu-bar-mode t)
+(if (eq system-type 'darwin)
+    (setq
+     mac-command-modifier 'super
+     mac-option-modifier 'meta
+     mac-control-modifier 'control
+     mac-function-modifier 'hyper))
 
 ;; Java
 
 (require 'lsp-java)
 (add-hook 'java-mode-hook #'lsp)
 
-(setenv "JAVA_HOME"  "/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home")
-(setq lsp-java-java-path
-      "/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home/bin/java")
+(cond
+ ((eq system-type 'darwin) ;; If on macOS (including Sequoia)
+  (setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home")
+  (setq lsp-java-java-path "/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home/bin/java"))
+
+ ((eq system-type 'gnu/linux) ;; If on Linux
+  (setenv "JAVA_HOME" "/usr/lib/jvm/java-21-openjdk/")
+  (setq lsp-java-java-path "/usr/lib/jvm/java-21-openjdk/bin/java")))
+
 (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
 (require 'lsp-ui)
-
-;; (defun my-java-mode-hook ()
-;;  (auto-fill-mode)
-;;  (flycheck-mode)
-;;  (subword-mode)
-;;  (yas-minor-mode)
-;;  (when window-system
-;;    (set-fringe-style '(8 . 0))))
-;; (add-hook 'java-mode-hook 'my-java-mode-hook)
-
-;; (require 'rtags) ;; optional, must have rtags installed
-;; (cmake-ide-setup)
 
 (define-key lsp-mode-map (kbd "C-f") 'lsp-find-definition)
 (yas-global-mode)
