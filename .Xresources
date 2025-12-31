@@ -17,6 +17,8 @@
 ! ! Xft.hintstyle: hintfull
 ! ! Xft.lcdfilter: lcddefault
 
+emacs.font: Source Code Pro-10
+
 Xft.dpi:        90
 Xft.antialias:  true
 Xft.rgba:       rgb

@@ -1,6 +1,4 @@
-#
-# ~/.bashrc
-#
+# ly for login
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -12,11 +10,17 @@ alias discord='discord --ignore-gpu-blocklist --diable-features=UseOzonePlatform
 
 alias google-chrome-stable='google-chrome-stable --use-angle=swiftshader'
 
-alias atom='atom --no-sandbox'
-
 # alias sioyek='sioyek --new-instance'
 
 export PS1="\[$(tput bold)\]\[$(tput setaf 15)\][\[$(tput setaf 15)\]\u\[$(tput setaf 15)\]@\[$(tput setaf 15)\]\h \[$(tput setaf 15)\]\W\[$(tput setaf 15)\]]\[$(tput setaf 15)\]\$ \[$(tput sgr0)\]"
+
+alias video=mplayer
+alias mouse=piper
+alias audio=pavucontrol
+alias pdf-reader=sioyek
+alias ui-start=startx
+alias file-cleaner=getrid
+alias iso-burner=balena-etcher
 
 # set an ad-hoc GUI timer
 timer() {
@@ -25,3 +29,18 @@ timer() {
   (sleep $N && zenity --info --title="Time's Up" --text="${*:-BING}") &
   echo "timer set for $N"
 }
+
+mime-file-query() {
+    xdg-mime query filetype "$1"
+}
+
+mime-app-query() {
+    xdg-mime query default "$1"
+}
+
+mime-set-app() {
+    # $1 is the app.desktop and $2 is the mime type
+    xdg-mime default "$1" "$2"
+}
+
+export _JAVA_AWT_WM_NONREPARENTING=1
