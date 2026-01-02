@@ -1110,6 +1110,7 @@
 (require 'multi-line)
 (global-set-key (kbd "C-c d") 'multi-line)
 
+<<<<<<< Updated upstream
 (require 'dirvish)
 (dirvish-override-dired-mode)
 (dirvish-peek-mode)
@@ -1169,3 +1170,7 @@
 ;; displays floating panel with debug buttons
 ;; requies emacs 26+
 (dap-ui-controls-mode 1)
+=======
+
+(setq lsp-apply-edits-after-file-operations nil)
+>>>>>>> Stashed changes
