@@ -1170,7 +1170,5 @@
 ;; displays floating panel with debug buttons
 ;; requies emacs 26+
 (dap-ui-controls-mode 1)
-=======
 
 (setq lsp-apply-edits-after-file-operations nil)
->>>>>>> Stashed changes
