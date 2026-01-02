@@ -1110,7 +1110,6 @@
 (require 'multi-line)
 (global-set-key (kbd "C-c d") 'multi-line)
 
-<<<<<<< Updated upstream
 (require 'dirvish)
 (dirvish-override-dired-mode)
 (dirvish-peek-mode)
