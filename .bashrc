@@ -16,6 +16,7 @@ export PS1="\[$(tput bold)\]\[$(tput setaf 15)\][\[$(tput setaf 15)\]\u\[$(tput 
 
 alias video=mplayer
 alias mouse=piper
+alias list-devices='ratbagctl list'
 alias audio=pavucontrol
 alias pdf-reader=sioyek
 alias ui-start=startx

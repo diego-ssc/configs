@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 (package-initialize)
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -12,12 +13,17 @@
    ["#ffffff" "#ffffff" "#ffffff" "#ffffff" "#928a7e" "#ffffff" "#ffffff" "gray90"])
  '(c-basic-offset 8)
  '(company-backends
-   '(company-bibtex company-web-slim company-web-jade company-web-html company-c-headers
-                    (company-keywords company-semantic company-capf company-clang company-bbdb company-dabbrev-code
-                                      company-files)
-                    company-dabbrev-code (company-auctex-macros company-auctex-symbols company-auctex-environments)
-                    company-auctex-bibs company-auctex-labels company-cmake company-files company-oddmuse
-                    company-dabbrev company-capf company-yasnippet))
+   '(company-bibtex company-web-slim company-web-jade company-web-html
+                    company-c-headers
+                    (company-keywords company-semantic company-capf
+                                      company-clang company-bbdb
+                                      company-dabbrev-code company-files)
+                    company-dabbrev-code
+                    (company-auctex-macros company-auctex-symbols
+                                           company-auctex-environments)
+                    company-auctex-bibs company-auctex-labels company-cmake
+                    company-files company-oddmuse company-dabbrev company-capf
+                    company-yasnippet))
  '(custom-enabled-themes '(Lambda))
  '(custom-safe-themes
    '("652b55e5a130aa07f79c4c2d2101ff0fd6a3e189cdcd32654dc001a5070e533d"
@@ -62,14 +68,18 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(all-the-icons all-the-icons-dired aws-snippets bison-mode cff cmake-mode company-auctex company-bibtex
-                   company-c-headers company-jedi company-quickhelp company-web cov crdt dirvish dockerfile-mode
-                   dummyparens evil ggtags haskell-mode iedit lsp-java lsp-jedi lsp-ui magit
-                   meson-mode multi-line multiple-cursors neotree orderless org-agenda-property org-alert org-appear
-                   org-attach-screenshot org-auto-expand org-autolist org-fragtog org-modern org-super-agenda
-                   org-superstar org-tree-slide paredit projectile pycoverage pyenv-mode pyvenv-auto racket-mode
-                   rust-mode sweeprolog typescript-mode vala-mode vertico which-key yaml-mode yasnippet-capf
-                   yasnippet-snippets))
+   '(all-the-icons all-the-icons-dired aws-snippets bison-mode cff cmake-mode
+                   company-auctex company-bibtex company-c-headers company-jedi
+                   company-quickhelp company-web cov crdt dap-mode dirvish
+                   dockerfile-mode dummyparens evil ggtags haskell-mode iedit
+                   lsp-java lsp-jedi lsp-ui magit meson-mode multi-line
+                   multiple-cursors neotree orderless org-agenda-property
+                   org-alert org-appear org-attach-screenshot org-auto-expand
+                   org-autolist org-fragtog org-modern org-super-agenda
+                   org-superstar org-tree-slide paredit projectile pycoverage
+                   pyenv-mode pyvenv-auto racket-mode rust-mode sweeprolog
+                   typescript-mode vala-mode vertico which-key yaml-mode
+                   yasnippet-capf yasnippet-snippets))
  '(scroll-bar-mode nil)
  '(send-mail-function 'mailclient-send-it)
  '(tab-width 4)
@@ -89,6 +99,7 @@
  '(compilation-mode-line-exit ((t (:inherit compilation-info :foreground "#ffffff" :weight bold))))
  '(compilation-mode-line-fail ((t (:weight bold :foreground "#928a7e" :inherit compilation-error))))
  '(cov-coverage-run-face ((t (:foreground "white"))))
+ '(dirvish-file-time ((t (:foreground "light gray"))))
  '(fill-column-indicator ((t (:foreground "dim gray"))))
  '(font-latex-bold-face ((t (:foreground "#c0c5ce" :inherit bold))))
  '(font-latex-italic-face ((t (:foreground "#c0c5ce" :inherit italic))))
@@ -164,7 +175,6 @@
 ;; Projectile
 (projectile-mode +1)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-(setq projectile-switch-project-action 'neotree-projectile-action)
 
 ;; Load 'all-the-icons
 (require 'all-the-icons)
@@ -179,51 +189,12 @@
      (setq TeX-view-program-list '(("Zathura" "zathura %o")))
      (setq TeX-view-program-selection '((output-pdf "Zathura")))))
 
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
-;; move to the neotree buffer
-(global-set-key (kbd "s-s") 'neotree-show)
-;; Set the neo-window-width to the current width of the
-;; neotree window, to trick neotree into resetting the
-;; width back to the actual window width.
-;; Fixes: https://github.com/jaypei/emacs-neotree/issues/262
-(eval-after-load "neotree"
-  '(add-to-list 'window-size-change-functions
-                (lambda (frame)
-                  (let ((neo-window (neo-global--get-window)))
-                    (unless (null neo-window)
-                      (setq neo-window-width (window-width neo-window)))))))
-
-;; (setq neo-autorefresh t)
-
 ;; Prevent using UI dialogs for prompts
 (setq use-dialog-box nil)
 
 ;; Kill whole-line, copying it to clipboard
 ;; Sets `C-c d` to `M-x kill-whole-line`
 (global-set-key (kbd "C-c d") 'kill-whole-line)
-
-;; Sets the neotree buffer wodth to be variable.
-(setq neo-window-fixed-size nil)
-
-;; Disables line numbers for neotree
-(defun my/neotree-hook (_unused)
-  (display-line-numbers-mode -1))
-(add-hook 'neo-after-create-hook 'my/neotree-hook)
-
-;; Sets the theme for neotree
-(setq neo-theme 'icons)
-
-;; Set the neo-window-width to the current width of the
-;; neotree window, to trick neotree into resetting the
-;; width back to the actual window width.
-;; Fixes: https://github.com/jaypei/emacs-neotree/issues/262
-(eval-after-load "neotree"
-  '(add-to-list 'window-size-change-functions
-                (lambda (frame)
-                  (let ((neo-window (neo-global--get-window)))
-                    (unless (null neo-window)
-                      (setq neo-window-width (window-width neo-window)))))))
 
 ;; Delete trailing whitespace binding
 (global-set-key (kbd "s-d") 'delete-trailing-whitespace)
@@ -1130,7 +1101,7 @@
 (use-package all-the-icons
   :if (display-graphic-p))
 
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
 ;; This configuration tells Dired to automatically suggest the directory in the other window as the destination when you
 ;; initiate a copy or move operation.
@@ -1138,3 +1109,63 @@
 
 (require 'multi-line)
 (global-set-key (kbd "C-c d") 'multi-line)
+
+(require 'dirvish)
+(dirvish-override-dired-mode)
+(dirvish-peek-mode)
+(dirvish-side-follow-mode)
+(setq dirvish-attributes
+      '(vc-state file-size git-msg subtree-state all-the-icons collapse file-time))
+(setq dirvish-mode-line-format '(:left (sort symlink) :right (vc-info yank index)))
+(setq dirvish-header-line-height '(25 . 35))
+(setq dirvish-side-width 38)
+;; (setq dirvish-header-line-format '(:left (path) :right (free-space)))
+(setq dired-listing-switches
+      "-l --almost-all --human-readable --group-directories-first --no-group")
+(bind-keys ("C-c f" . dirvish-fd)
+           :map 'dirvish-mode-map
+           ;; left click for expand/collapse dir or open file
+           ("<mouse-1>" . dirvish-subtree-toggle-or-open)
+           ;; middle click for opening file / entering dir in other window
+           ("<mouse-2>" . dired-mouse-find-file-other-window)
+           ;; right click for opening file / entering dir
+           ("<mouse-3>" . dired-mouse-find-file)
+           ([remap dired-sort-toggle-or-edit] . dirvish-quicksort)
+           ([remap dired-do-redisplay] . dirvish-ls-switches-menu)
+           ([remap dired-do-copy] . dirvish-yank-menu)
+           ("?"   . dirvish-dispatch)
+           ("q"   . dirvish-quit)
+           ("a"   . dirvish-quick-access)
+           ("f"   . dirvish-file-info-menu)
+           ("x"   . dired-do-flagged-delete)
+           ("y"   . dirvish-yank-menu)
+           ("s"   . dirvish-quicksort)
+           ("TAB" . dirvish-subtree-toggle)
+           ("M-t" . dirvish-layout-toggle)
+           ("M-b" . dirvish-history-go-backward)
+           ("M-f" . dirvish-history-go-forward)
+           ("C-f" . dirvish-narrow)
+           ("M-m" . dirvish-mark-menu)
+           ("s-s" . dirvish-setup-menu)
+           ("M-e" . dirvish-emerge-menu))
+(define-key dired-mode-map (kbd "<left>") #'dired-up-directory)
+(define-key dired-mode-map (kbd "<right>") #'dired-find-file)
+(global-set-key (kbd "C-x t") 'dirvish-side)
+(global-set-key (kbd "C-x d") 'dirvish-layout-toggle)
+
+
+(require 'dap-mode)
+
+(dap-mode 1)
+
+;; The modes below are optional
+
+(dap-ui-mode 1)
+;; enables mouse hover support
+(dap-tooltip-mode 1)
+;; use tooltips for mouse hover
+;; if it is not enabled `dap-mode' will use the minibuffer.
+(tooltip-mode 1)
+;; displays floating panel with debug buttons
+;; requies emacs 26+
+(dap-ui-controls-mode 1)
