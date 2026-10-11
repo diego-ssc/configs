@@ -1,0 +1,100 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+opacity = 0.7
+blur = true
+decorations = "buttonless"
+padding = { x = 10, y = 10 }
+option_as_alt = "OnlyLeft"
+
+[scrolling]
+history = 1000
+
+[colors.primary]
+background = "#000000"
+foreground = "#c0c5ce"
+
+[colors.cursor]
+text = "#fafafa"
+cursor = "#c0c5ce"
+
+[colors.normal]
+black = "#2b303b"
+red = "#ffffff"
+green = "#928a7e"
+blue = "#7d7d7c"
+magenta = "#e5786d"
+cyan = "#70e1e8"
+white = "#b7c5d3"
+
+[colors.bright]
+black = "#65737e"
+red = "#bf616a"
+green = "#a3be8c"
+blue = "#8fa1b3"
+magenta = "#b48ead"
+cyan = "#96b5b4"
+white = "#eff1f5"
+
+# Emacs-like keybindings
+# \u001b = ESC (Meta prefix), \u0001 = C-a, \u0005 = C-e, \u007f = DEL
+
+[keyboard]
+bindings = [
+  # Word movement
+  { key = "F",     mods = "Alt",     chars = "\u001bf" },  # M-f: forward-word
+  { key = "B",     mods = "Alt",     chars = "\u001bb" },  # M-b: backward-word
+  { key = "Right", mods = "Alt",     chars = "\u001bf" },  # Option+Right: forward-word
+  { key = "Left",  mods = "Alt",     chars = "\u001bb" },  # Option+Left: backward-word
+
+  # Word deletion
+  { key = "D",     mods = "Alt",     action = "ScrollHalfPageDown" },
+  { key = "Back",  mods = "Alt",     chars = "\u001b\u007f" },  # M-DEL: backward-kill-word
+
+  # Line movement (Cmd+Left/Right mapped to C-a/C-e)
+  { key = "Left",  mods = "Super",   chars = "\u0001" },   # Cmd+Left: C-a beginning-of-line
+  { key = "Right", mods = "Super",   chars = "\u0005" },   # Cmd+Right: C-e end-of-line
+
+  # Text manipulation
+  { key = "T",     mods = "Alt",     chars = "\u001bt" },  # M-t: transpose-words
+  { key = "U",     mods = "Alt",     action = "ScrollHalfPageUp" },
+  { key = "L",     mods = "Alt",     chars = "\u001bl" },  # M-l: downcase-word
+  { key = "C",     mods = "Alt",     chars = "\u001bc" },  # M-c: capitalize-word
+
+  # History and search
+  { key = "Period", mods = "Alt",    chars = "\u001b." },  # M-.: insert-last-argument
+  { key = "R",      mods = "Alt",    chars = "\u001br" },  # M-r: revert-line
+  { key = "P",      mods = "Alt",    chars = "\u001bp" },  # M-p: history search backward
+  { key = "N",      mods = "Alt",    chars = "\u001bn" },  # M-n: history search forward
+
+  # Numeric argument prefix (M-0 through M-9)
+  { key = "Key0",  mods = "Alt",     chars = "\u001b0" },
+  { key = "Key1",  mods = "Alt",     chars = "\u001b1" },
+  { key = "Key2",  mods = "Alt",     chars = "\u001b2" },
+  { key = "Key3",  mods = "Alt",     chars = "\u001b3" },
+  { key = "Key4",  mods = "Alt",     chars = "\u001b4" },
+  { key = "Key5",  mods = "Alt",     chars = "\u001b5" },
+  { key = "Key6",  mods = "Alt",     chars = "\u001b6" },
+  { key = "Key7",  mods = "Alt",     chars = "\u001b7" },
+  { key = "Key8",  mods = "Alt",     chars = "\u001b8" },
+  { key = "Key9",  mods = "Alt",     chars = "\u001b9" },
+
+  # Kill ring
+  { key = "Y",     mods = "Alt",     chars = "\u001by" },  # M-y: yank-pop
+
+  # Misc useful Meta combos
+  { key = "Slash",     mods = "Alt", chars = "\u001b/" },  # M-/: dabbrev-expand
+  { key = "Backslash", mods = "Alt", chars = "\u001b\\" }, # M-\: delete-horizontal-space
+  { key = "Space",     mods = "Alt", chars = "\u001b " },  # M-SPC: just-one-space
+  { key = "Semicolon", mods = "Alt", chars = "\u001b;" },  # M-;: comment-dwim
+
+  # Shift+Return for literal newline
+  { key = "Return", mods = "Shift",  chars = "\u001b\r" },
+
+  # Alt+Enter sends M-RET (org-mode, etc.)
+  { key = "Return", mods = "Alt",    chars = "\u001b\r" },
+
+  # M-x: execute-extended-command
+  { key = "X",     mods = "Alt",     chars = "\u001bx" },
+]

@@ -68,18 +68,19 @@
  '(jdee-server-dir "~/myjars")
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(all-the-icons all-the-icons-dired aws-snippets bison-mode cff cmake-mode
-                   company-auctex company-bibtex company-c-headers company-jedi
-                   company-quickhelp company-web cov crdt dap-mode dirvish
-                   dockerfile-mode dummyparens evil ggtags haskell-mode iedit
-                   lsp-java lsp-jedi lsp-ui magit meson-mode multi-line
-                   multiple-cursors neotree orderless org-agenda-property
-                   org-alert org-appear org-attach-screenshot org-auto-expand
-                   org-autolist org-fragtog org-modern org-super-agenda
-                   org-superstar org-tree-slide paredit projectile pycoverage
+   '(all-the-icons all-the-icons-dired aws-snippets bison-mode bitbake cff
+                   cmake-mode company-auctex company-bibtex company-c-headers
+                   company-jedi company-math company-quickhelp company-web cov
+                   crdt csv-mode dap-mode dirvish dockerfile-mode dummyparens
+                   evil ggtags haskell-mode iedit lsp-java lsp-jedi lsp-pyright
+                   lsp-ui magit meson-mode multi-line multiple-cursors neotree
+                   openwith orderless org-agenda-property org-alert org-appear
+                   org-attach-screenshot org-auto-expand org-autolist
+                   org-fragtog org-modern org-super-agenda org-superstar
+                   org-tree-slide paredit pinyin projectile pycoverage
                    pyenv-mode pyvenv-auto racket-mode rust-mode sweeprolog
-                   typescript-mode vala-mode vertico which-key yaml-mode
-                   yasnippet-capf yasnippet-snippets))
+                   typescript-mode vala-mode vertico vterm which-key windresize
+                   yaml-mode yasnippet-capf yasnippet-snippets))
  '(scroll-bar-mode nil)
  '(send-mail-function 'mailclient-send-it)
  '(tab-width 4)
@@ -561,6 +562,32 @@
 (add-hook 'prog-mode-hook 'activate-default-input-method)
 (add-hook 'markdown-mode-hook 'activate-default-input-method)
 
+(use-package pyim
+  :ensure t
+  :config
+  (use-package pyim-basedict
+    :ensure t
+    :config (pyim-basedict-enable))
+  (setq pyim-page-tooltip 'posframe
+        pyim-page-style 'vertical
+        pyim-page-length 9)
+  (define-key pyim-mode-map (kbd "<down>") #'pyim-next-word)
+  (define-key pyim-mode-map (kbd "<up>") #'pyim-previous-word)
+  (define-key pyim-mode-map (kbd "<return>") #'pyim-select-word)
+  (define-key pyim-mode-map (kbd "RET") #'pyim-select-word)
+  ;; pyim only highlights the current candidate after the first
+  ;; next/previous-word command; always highlight it, including the
+  ;; first candidate when the menu opens.
+  (advice-add 'pyim-page--refresh :filter-args (lambda (_args) '(t))))
+
+(defun toggle-pinyin-input-method ()
+  "Toggle between pyim and `default-input-method'."
+  (interactive)
+  (if (equal current-input-method "pyim")
+      (activate-input-method default-input-method)
+    (activate-input-method "pyim")))
+(global-set-key (kbd "C-c h") #'toggle-pinyin-input-method)
+
 (add-to-list 'org-latex-packages-alist
              '("" "tikz" t))
 (setq org-startup-with-latex-preview t)
@@ -727,7 +754,7 @@
 (add-hook 'sgml-mode-hook #'lsp)
 (add-hook 'web-mode-hook #'lsp)
 (add-hook 'js-mode-hook #'lsp)
-(add-hook 'python-mode-hook #'lsp)
+;; Python LSP is configured further below (pyright + Bemol); see "lsp Python".
 (add-hook 'rust-mode-hook #'lsp)
 
 ;; Enable snippet expansion in LSP
@@ -788,7 +815,7 @@
   (defun alacritty ()
     (interactive)
     (let ((alacritty "/Applications/Alacritty.app/Contents/MacOS/alacritty"))
-      (start-process alacritty nil alacritty "--working-directory" (projectile-project-root))))
+      (start-process alacritty nil alacritty "--working-directory" (expand-file-name (projectile-project-root)))))
 
   (global-set-key (kbd "C-c t") 'alacritty)
 
@@ -796,7 +823,9 @@
     (interactive)
     (let ((alacritty "/Applications/Alacritty.app/Contents/MacOS/alacritty"))
       (start-process alacritty nil alacritty "--working-directory"
-                     (file-name-directory (or buffer-file-name load-file-name)))))
+                     (expand-file-name
+                      (or (and buffer-file-name (file-name-directory buffer-file-name))
+                          default-directory)))))
 
   (global-set-key (kbd "C-c y") 'alacritty-dir))
 
@@ -814,7 +843,8 @@
     (interactive)
     (let ((urxvt "urxvt"))
       (start-process urxvt nil urxvt "-cd"
-                     (file-name-directory (or buffer-file-name load-file-name)))))
+                     (or (and buffer-file-name (file-name-directory buffer-file-name))
+                         default-directory))))
 
   (global-set-key (kbd "C-c y") 'urxvt-dir)))
 
@@ -884,6 +914,9 @@
 (add-hook 'python-mode-hook 'cov-mode)
 (add-hook 'c-mode-hook 'cov-mode)
 (add-hook 'c++-mode-hook 'cov-mode)
+(add-hook 'js-mode-hook 'cov-mode)
+(add-hook 'js-ts-mode-hook 'cov-mode)
+(add-hook 'typescript-mode-hook 'cov-mode)
 
 (setq cov-lcov-patterns
       (list
@@ -936,7 +969,7 @@
           (lambda ()
             (setq-local company-backends
                         '(company-yasnippet
-                          (company-capf company-jedi)))))
+                          (company-capf)))))
 
 (add-hook 'typescript-mode-hook
           (lambda ()
@@ -969,20 +1002,47 @@
                         '(company-yasnippet
                           (company-capf company-clang company-c-headers company-keywords company-semantic)))))
 
-;; (require 'lsp-jedi)
-
 (require 'pyvenv)
 (add-hook 'python-mode-hook #'pyvenv-mode)
 (use-package pyvenv-auto
   :hook ((python-mode . pyvenv-auto-run)))
 
-;; (setq lsp-pylsp-plugins-jedi-use-pyenv-environment t)
-(setq lsp-pylsp-plugins-isort-enabled t)
-(setq lsp-pylsp-plugins-mypy-enabled t)
-(setq lsp-pylsp-plugins-pyflakes-enabled t)
+;; --- Brazil Python via Bemol: use pyright so pyrightconfig.json is honored ---
+;; Bemol (run in the workspace root) writes pyrightconfig.json into each package;
+;; its extraPaths resolve cross-package imports and go-to-definition. pyright
+;; reads that file automatically. pylsp/jedi ignore it, so prefer pyright.
+(require 'lsp-pyright)
+(add-to-list 'lsp-disabled-clients 'pylsp)
 (add-to-list 'lsp-disabled-clients 'ruff-lsp)
+(add-hook 'python-mode-hook
+          (lambda () (require 'lsp-pyright) (lsp)))
 
-(setq lsp-pylsp-plugins-ruff-enabled t)
+(defun my/bemol-add-workspace-folders ()
+  "Register every Brazil workspace root from .bemol/ws_root_folders with lsp.
+Lets lsp-mode treat sibling packages as one project (find-references, etc.).
+Run `bemol' in the workspace root first to generate the file."
+  (interactive)
+  (when-let* ((root (locate-dominating-file default-directory ".bemol"))
+              (f (expand-file-name ".bemol/ws_root_folders" root))
+              ((file-readable-p f)))
+    (with-temp-buffer
+      (insert-file-contents f)
+      (dolist (line (split-string (buffer-string) "\n" t))
+        (lsp-workspace-folders-add line)))))
+
+;; macOS mounts (/Volumes/workplace) carry system metadata dirs that the
+;; kernel forbids reading; keep lsp's recursive file watchers out of them.
+(with-eval-after-load 'lsp-mode
+  (dolist (re '("[/\\\\]\\.DocumentRevisions-V100\\'"
+                "[/\\\\]\\.Spotlight-V100\\'"
+                "[/\\\\]\\.Trashes\\'"
+                "[/\\\\]\\.fseventsd\\'"
+                "[/\\\\]\\.TemporaryItems\\'"
+                ;; Brazil build/env trees: huge and regenerated, never watch them.
+                "[/\\\\]build\\'"
+                "[/\\\\]env\\'"
+                "[/\\\\]\\.brazil\\'"))
+    (add-to-list 'lsp-file-watch-ignored-directories re)))
 
 (require 'lsp-ui)
 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
@@ -1108,7 +1168,20 @@
 (setq dired-dwim-target t)
 
 (require 'multi-line)
-(global-set-key (kbd "C-c d") 'multi-line)
+
+;; Half-page scrolling (like less/vim C-d/C-u)
+(defun scroll-half-page-down ()
+  "Scroll down half a page."
+  (interactive)
+  (scroll-up (/ (window-height) 2)))
+
+(defun scroll-half-page-up ()
+  "Scroll up half a page."
+  (interactive)
+  (scroll-down (/ (window-height) 2)))
+
+(global-set-key (kbd "C-c d") 'scroll-half-page-down)
+(global-set-key (kbd "C-c u") 'scroll-half-page-up)
 
 (require 'dirvish)
 (dirvish-override-dired-mode)
@@ -1132,7 +1205,7 @@
            ("<mouse-3>" . dired-mouse-find-file)
            ([remap dired-sort-toggle-or-edit] . dirvish-quicksort)
            ([remap dired-do-redisplay] . dirvish-ls-switches-menu)
-           ([remap dired-do-copy] . dirvish-yank-menu)
+           ;; ([remap dired-do-copy] . dirvish-yank-menu)
            ("?"   . dirvish-dispatch)
            ("q"   . dirvish-quit)
            ("a"   . dirvish-quick-access)
@@ -1171,3 +1244,142 @@
 (dap-ui-controls-mode 1)
 
 (setq lsp-apply-edits-after-file-operations nil)
+
+(require 'bitbake)
+
+
+(global-set-key (kbd "M-RET") 'smerge-keep-current)
+
+
+;; Tramp optimizations
+(connection-local-set-profile-variables
+ 'remote-direct-async-process
+ '((tramp-direct-async-process . t)))
+
+(connection-local-set-profiles
+ '(:application tramp :machine "remotehost")
+ 'remote-direct-async-process)
+
+(use-package vterm
+    :ensure t)
+
+(add-hook 'vterm-mode-hook
+          (lambda ()
+            (when (bound-and-true-p global-dummyparens-mode)
+              (dummyparens-mode -1))))
+
+;; UART util
+(defun uart-term (device)
+  "Launch external terminal and connect to serial DEVICE using picocom."
+  (interactive
+   (list (completing-read "Select device: " '("vega (921600)" "raspberry (115200)"))))
+  (let* ((baud-rate (pcase device
+                      ("vega (921600)" 921600)
+                      ("raspberry (115200)" 115200)
+                      (_ (completing-read "Baud rate: " '(9600 115200 921600)))))
+         (port (car (directory-files "/dev/" t "tty\\(USB\\|ACM\\)0$\\|cu\\.usbserial.*")))
+         (cmd (format "picocom -b %s %s -g /tmp/uart.log" baud-rate port)))
+    (cond
+     ((eq system-type 'darwin)
+      (start-process "uart-alacritty" nil
+                     "/Applications/Alacritty.app/Contents/MacOS/alacritty"
+                     "-e" "sh" "-c" cmd))
+     ((eq system-type 'gnu/linux)
+      (start-process "uart-urxvt" nil "urxvt" "-e" "sh" "-c" cmd)))))
+
+;; LaTeX-specific company backends
+(add-hook 'LaTeX-mode-hook
+          (lambda ()
+            (setq-local company-backends
+                        '((company-auctex-macros
+                           company-auctex-symbols
+                           company-auctex-environments
+                           company-math-symbols-latex
+                           company-math-symbols-unicode
+                           company-ispell
+                           company-yasnippet)
+                          company-auctex-bibs
+                          company-auctex-labels))
+            (setq-local company-minimum-prefix-length 1)))
+
+(setq ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+
+(add-hook 'text-mode-hook
+          (lambda ()
+            (setq-local company-backends
+                        '(company-ispell))
+            (setq-local company-minimum-prefix-length 1)))
+
+
+;; Clipboard management
+(setq select-enable-clipboard t)
+(setq x-select-enable-clipboard t)
+(setq save-interprogram-paste-before-kill nil)
+(defun my-filter-kill-ring-to-clipboard (orig-fun &rest args)
+  "Skip kill-ring for destructive commands that shouldn't pollute it."
+  (unless (memq this-command '(backward-kill-word
+                               kill-word
+                               kill-line
+                               kill-whole-line
+                               kill-visual-line))
+    (apply orig-fun args)))
+(advice-add 'kill-new :around #'my-filter-kill-ring-to-clipboard)
+
+
+;; File program specs
+(require 'openwith)
+(openwith-mode t)
+(setq openwith-associations
+      '(("\\.pdf\\'" "zathura" (file))))
+
+
+;; Windresize
+(use-package windresize
+  :ensure t
+  :bind ("C-c w" . windresize))
+
+;; Center
+(global-set-key (kbd "C-c RET") 'recenter-top-bottom)
+
+;; Open new buffers in the current window. Don't split screen for new buffer.
+(setq display-buffer-alist
+      '((".*" . (display-buffer-same-window))))
+
+;; ----------------------------------------------------------------------------
+;; Window splitting on arrow keys (numpad-free workflow)
+;; ----------------------------------------------------------------------------
+;; Rebinds window splits onto C-x <arrow> so they are reachable without the
+;; numeric keypad.  Mnemonic: <down> stacks a window below, <right> puts one
+;; to the side.  C-x 2 / C-x 3 still work as before; these are additive.
+;;
+;; Note: C-x <right> normally runs `next-buffer' (and C-x <left> `previous-buffer').
+;; To avoid losing buffer traversal, it is relocated onto Ctrl+arrow below.
+(global-set-key (kbd "C-x <down>")  #'split-window-below)   ; stacked split
+(global-set-key (kbd "C-x <right>") #'split-window-right)   ; side-by-side split
+
+;; Preserve buffer traversal, just add Ctrl to the arrow.
+(global-set-key (kbd "C-x C-<left>")  #'previous-buffer)
+(global-set-key (kbd "C-x C-<right>") #'next-buffer)
+
+;; Closing windows in the same arrow cluster (replaces numpad C-x 0 / C-x 1).
+;; <up> collapses the current window; C-<up> keeps only the current one.
+;; C-x 0 / C-x 1 still work as before.
+(global-set-key (kbd "C-x <up>")   #'delete-window)         ; close this window
+(global-set-key (kbd "C-x C-<up>") #'delete-other-windows)  ; close the rest
+
+
+;; Recenter middle and top
+(global-set-key (kbd "C-M-<return>") #'recenter-top-bottom)
+(setq recenter-positions '(middle top))
+
+(require 'pinyin)
+
+(use-package csv-mode
+  :ensure t
+  :mode "\\.csv\\'"
+  :hook (csv-mode . (lambda ()
+                      (csv-align-mode 1)
+                      (csv-header-line)
+                      (toggle-truncate-lines 1))))
+
