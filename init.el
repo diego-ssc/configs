@@ -78,9 +78,10 @@
                    org-attach-screenshot org-auto-expand org-autolist
                    org-fragtog org-modern org-super-agenda org-superstar
                    org-tree-slide paredit pinyin projectile pycoverage
-                   pyenv-mode pyvenv-auto racket-mode rust-mode sweeprolog
-                   typescript-mode vala-mode vertico vterm which-key windresize
-                   yaml-mode yasnippet-capf yasnippet-snippets))
+                   pyenv-mode pyim pyim-basedict pyvenv-auto racket-mode
+                   rust-mode sweeprolog typescript-mode vala-mode vertico vterm
+                   which-key windresize yaml-mode yasnippet-capf
+                   yasnippet-snippets))
  '(scroll-bar-mode nil)
  '(send-mail-function 'mailclient-send-it)
  '(tab-width 4)

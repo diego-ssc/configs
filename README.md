@@ -55,6 +55,10 @@
 /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 ```
 
+```
+~/.config/gtk-3.0/gtk.css
+```
+
 
 # Dependencies
 

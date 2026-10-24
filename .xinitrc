@@ -2,12 +2,17 @@
 
 [[ -f ~/.Xresources ]] && xrdb -merge -I$HOME ~/.Xresources
 
-#### Third monitor
-# xrandr --dpi 120 --auto --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rate 144 --output HDMI-0 --mode 1920x1080 --right-of DP-0 --rate 75 &
-xrandr --dpi 120 --auto --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rate 75 --output DP-0 --mode 1920x1080 --left-of HDMI-0 --rate 144 &
-# xrandr --dpi 120 --auto --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rate 75 --output DP-0 --mode 1920x1080 --right-of HDMI-0 --rate 75 &
+# New monitors
+xrandr --dpi 96 --auto --output DisplayPort-2 --primary --mode 2560x1440 --pos 0x0 --rate 180 --output HDMI-0 --mode 1920x1080 --rate 75 --right-of DisplayPort-2 --rate 144 &
 
+
+# Old monitors
+# xrandr --dpi 120 --auto  --output DP-0 --mode 1920x1080 --left-of HDMI-0 --rate 144 &
+
+# xrandr --dpi 120 --auto --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rate 144 --output HDMI-0 --mode 1920x1080 --right-of DP-0 --rate 75 &
+# xrandr --dpi 120 --auto --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --rate 75 --output DP-0 --mode 1920x1080 --right-of HDMI-0 --rate 75 &
 # xrandr --dpi 120 --auto --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rate 144 --output HDMI-0 --mode 1920x1080 --right-of DP-0 --rate 75 --output DVI-D-0 --same-as DP-0 &
+
 
 # 142
 
@@ -15,7 +20,7 @@ xrandr --dpi 120 --auto --output HDMI-0 --primary --mode 1920x1080 --pos 0x0 --r
 xinput set-prop 'Logitech G502 HERO Gaming Mouse' 'libinput Accel Speed' 0.42 &
 
 # Nvidia.
-nvidia-settings --load-config-only &
+# nvidia-settings --load-config-only &
 
 # Emacs Server.
 emacs --daemon &

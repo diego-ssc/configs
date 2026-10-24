@@ -1,0 +1,9 @@
+@binding-set MacStyleText {
+  bind "<alt>Left" { "move-cursor" (words, -1, 0) };
+  bind "<alt>Right" { "move-cursor" (words, 1, 0) };
+  bind "<alt>BackSpace" { "delete-from-cursor" (word-ends, -1) };
+  bind "<alt>d" { "delete-from-cursor" (word-ends, 1) };
+}
+
+entry { -gtk-key-bindings: MacStyleText; }
+textview { -gtk-key-bindings: MacStyleText; }
