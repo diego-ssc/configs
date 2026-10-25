@@ -17,7 +17,6 @@ export PS1="\[$(tput bold)\]\[$(tput setaf 15)\][\[$(tput setaf 15)\]\u\[$(tput 
 alias video=mplayer
 alias mouse=piper
 alias list-devices='ratbagctl list'
-alias audio=pavucontrol
 alias pdf-reader=sioyek
 alias ui-start=startx
 alias file-cleaner=getrid
@@ -42,6 +41,11 @@ mime-app-query() {
 mime-set-app() {
     # $1 is the app.desktop and $2 is the mime type
     xdg-mime default "$1" "$2"
+}
+
+lambda-audio() {
+    urxvt -e alsamixer &
+    pavucontrol &
 }
 
 export _JAVA_AWT_WM_NONREPARENTING=1
