@@ -37,7 +37,7 @@ xdotool mousemove 960 540 &
 numlockx &
 
 # Wallpaper
-# Command: feh --bg-fill ~/Downloads/wallpapers/pexels-eberhard-grossgasteiger-1287075.jpg ~/Downloads/wallpapers/pexels-eberhard-grossgasteiger-1287075.jpg ~/Downloads/wallpapers/trees-gf45eec20f_1920.jpg
+# Command: feh --bg-fill ~/Documentos/wallpapers/pexels-eberhard-grossgasteiger-1287075.jpg
 ~/.fehbg &
 
 ### DWM

@@ -3,6 +3,18 @@
   bind "<alt>Right" { "move-cursor" (words, 1, 0) };
   bind "<alt>BackSpace" { "delete-from-cursor" (word-ends, -1) };
   bind "<alt>d" { "delete-from-cursor" (word-ends, 1) };
+  bind "<ctl>a" { "move-cursor" (display-line-ends, -1, 0) };
+  bind "<ctl>e" { "move-cursor" (display-line-ends, 1, 0) };
+  bind "<alt><shft>Left" { "move-cursor" (words, -1, 1) };
+  bind "<alt><shft>Right" { "move-cursor" (words, 1, 1) };
+  bind "<ctl><shft>a" { "move-cursor" (display-line-ends, -1, 1) };
+  bind "<ctl><shft>e" { "move-cursor" (display-line-ends, 1, 1) };
+  bind "<ctl>space" { "set-anchor" () };
+  bind "<ctl>k" { "delete-from-cursor" (display-line-ends, 1) };
+  bind "<ctl>u" { "delete-from-cursor" (display-line-ends, -1) };
+  bind "<ctl>y" { "paste-clipboard" () };
+  bind "<alt>w" { "copy-clipboard" () };
+  bind "<ctl>t" { "transpose-chars" () };
 }
 
 entry { -gtk-key-bindings: MacStyleText; }

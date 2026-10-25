@@ -37,9 +37,6 @@
 ~/.inputrc
 ```
 ```
-/boot/loader/loader.conf
-```
-```
 /etc/ly/config.ini
 ```
 ```
