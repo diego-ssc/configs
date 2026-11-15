@@ -23,7 +23,8 @@ Xft.dpi:        90
 Xft.antialias:  true
 Xft.rgba:       rgb
 Xft.hinting:    true
-Xft.hintstyle:  hintfull
+Xft.hintstyle:  hintslight
+Xft.lcdfilter:  lcddefault
 
 discord.hintstyle: hintsnone
 
@@ -56,9 +57,14 @@ discord.hintstyle: hintsnone
 *.color7:      #c0c5ce
 *.color15:     #eff1f5
 
+URxvt.keysym.Meta-w: eval:selection_to_clipboard
+URxvt.keysym.Control-y: eval:paste_clipboard
 URxvt*scrollBar:         false
 URxvt*scrollBar_right:   false
 URxvt.geometry: 80x-1
+URxvt.perl-ext-common: default,keyboard-select
+! URxvt.keysym.Control-j: perl:keyboard-select:activate
+! URxvt.keyboard-select.clipboard: true
 
 URxvt*transparent:       true
 URxvt*shading:       42
@@ -108,7 +114,7 @@ URxvt.internalBorder:  4
 URxvt.keysym.Control-l: command:\033c
 
 *antialias:  true
-*autohint:   true
+! *autohint:   true
 
 !! binding: move between words
 URxvt.keysym.M-Left:   \033[1;5D

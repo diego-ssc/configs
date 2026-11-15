@@ -56,6 +56,13 @@
 ~/.config/gtk-3.0/gtk.css
 ```
 
+```
+~/.config/gtk-3.0/settings.ini
+```
+
+```
+/etc/X11/xorg.conf.d/20-amdgpu.conf
+```
 
 # Dependencies
 

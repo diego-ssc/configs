@@ -15,7 +15,6 @@ alias google-chrome-stable='google-chrome-stable --use-angle=swiftshader'
 export PS1="\[$(tput bold)\]\[$(tput setaf 15)\][\[$(tput setaf 15)\]\u\[$(tput setaf 15)\]@\[$(tput setaf 15)\]\h \[$(tput setaf 15)\]\W\[$(tput setaf 15)\]]\[$(tput setaf 15)\]\$ \[$(tput sgr0)\]"
 
 alias video=mplayer
-alias mouse=piper
 alias list-devices='ratbagctl list'
 alias pdf-reader=sioyek
 alias ui-start=startx
@@ -47,5 +46,16 @@ lambda-audio() {
     urxvt -e alsamixer &
     pavucontrol &
 }
+
+lambda-error-logs() {
+    journalctl -b  -p 3
+}
+
+# Total control: Stops both system sleep and screen blanking
+alias lambda-nosleep="sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target && xset s off && xset -dpms"
+
+# Restores default behavior for both
+alias lambda-allowsleep="sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target && xset s on && xset +dpms"
+
 
 export _JAVA_AWT_WM_NONREPARENTING=1
