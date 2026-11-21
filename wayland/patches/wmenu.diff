@@ -1,0 +1,142 @@
+diff --git a/menu.c b/menu.c
+index 360ee69..aa7c31d 100644
+--- a/menu.c
++++ b/menu.c
+@@ -86,10 +86,11 @@ static bool parse_color(const char *color, uint32_t *result) {
+ void menu_getopts(struct menu *menu, int argc, char *argv[]) {
+ 	const char *usage =
+ 		"Usage: wmenu [-biPv] [-f font] [-l lines] [-o output] [-p prompt]\n"
+-		"\t[-N color] [-n color] [-M color] [-m color] [-S color] [-s color]\n";
++		"\t[-N color] [-n color] [-M color] [-m color] [-S color] [-s color]\n"
++		"\t[-x x] [-y y] [-w width] [-h height]\n";
+ 
+ 	int opt;
+-	while ((opt = getopt(argc, argv, "bhiPvf:l:o:p:N:n:M:m:S:s:")) != -1) {
++	while ((opt = getopt(argc, argv, "biPvf:l:o:p:N:n:M:m:S:s:x:y:w:h:")) != -1) {
+ 		switch (opt) {
+ 		case 'b':
+ 			menu->bottom = true;
+@@ -136,15 +137,26 @@ void menu_getopts(struct menu *menu, int argc, char *argv[]) {
+ 			}
+ 			break;
+ 		case 'S':
+-			if (!parse_color(optarg, &menu->selectionbg)) {
++			if (!parse_color(optarg, &menu->selectionbg))
+ 				fprintf(stderr, "Invalid selection background color: %s", optarg);
+-			}
+ 			break;
+ 		case 's':
+ 			if (!parse_color(optarg, &menu->selectionfg)) {
+ 				fprintf(stderr, "Invalid selection foreground color: %s", optarg);
+ 			}
+ 			break;
++		case 'x':
++			menu->x = atoi(optarg);
++			break;
++		case 'y':
++			menu->y = atoi(optarg);
++			break;
++		case 'w':
++			menu->width = atoi(optarg);
++			break;
++		case 'h':
++			menu->height = atoi(optarg);
++			break;
+ 		default:
+ 			fprintf(stderr, "%s", usage);
+ 			exit(EXIT_FAILURE);
+@@ -160,7 +172,7 @@ void menu_getopts(struct menu *menu, int argc, char *argv[]) {
+ // Compute menu line height and padding.
+ void menu_calc_height(struct menu *menu) {
+ 	int height = get_font_height(menu->font);
+-	menu->line_height = height + 2;
++	menu->line_height = menu->height > 0 ? menu->height : height + 2;
+ 	menu->height = menu->line_height;
+ 	if (menu->lines > 0) {
+ 		if (menu->item_count < (size_t)menu->lines) {
+diff --git a/menu.h b/menu.h
+index 491b014..9c3a6e8 100644
+--- a/menu.h
++++ b/menu.h
+@@ -56,6 +56,8 @@ struct menu {
+ 	cairo_surface_t *test_surface;
+ 	cairo_t *test_cairo;
+ 
++	int x;
++	int y;
+ 	int width;
+ 	int height;
+ 	int line_height;
+diff --git a/wayland.c b/wayland.c
+index 823ced1..6c32624 100644
+--- a/wayland.c
++++ b/wayland.c
+@@ -446,8 +446,10 @@ int menu_run(struct menu *menu) {
+ 	assert(layer_surface != NULL);
+ 	context->layer_surface = layer_surface;
+ 
+-	uint32_t anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT |
+-		ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT;
++	uint32_t anchor = ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT;
++	if (menu->width == 0) {
++		anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT;
++	}
+ 	if (menu->bottom) {
+ 		anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM;
+ 	} else {
+@@ -455,7 +457,12 @@ int menu_run(struct menu *menu) {
+ 	}
+ 
+ 	zwlr_layer_surface_v1_set_anchor(layer_surface, anchor);
+-	zwlr_layer_surface_v1_set_size(layer_surface, 0, menu->height);
++	zwlr_layer_surface_v1_set_margin(layer_surface,
++		menu->bottom ? 0 : menu->y,
++		menu->width == 0 ? menu->x : 0,
++		menu->bottom ? menu->y : 0,
++		menu->x);
++	zwlr_layer_surface_v1_set_size(layer_surface, menu->width, menu->height);
+ 	zwlr_layer_surface_v1_set_exclusive_zone(layer_surface, -1);
+ 	zwlr_layer_surface_v1_set_keyboard_interactivity(layer_surface, true);
+ 	zwlr_layer_surface_v1_add_listener(layer_surface, &layer_surface_listener, context);
+diff --git a/wmenu-run.c b/wmenu-run.c
+index 59f6dc0..b13855e 100644
+--- a/wmenu-run.c
++++ b/wmenu-run.c
+@@ -24,6 +24,24 @@ static void read_items(struct menu *menu) {
+ 		}
+ 		closedir(dir);
+ 	}
++
++	FILE *fp = popen("/bin/bash -O expand_aliases -c 'source ~/.bashrc >/dev/null 2>&1; compgen -A alias -A function'", "r");
++	if (fp) {
++		char *line = NULL;
++		size_t cap = 0;
++		ssize_t len;
++		while ((len = getline(&line, &cap, fp)) > 0) {
++			if (line[len - 1] == '\n') {
++				line[len - 1] = '\0';
++			}
++			if (line[0] != '\0') {
++				menu_add_item(menu, strdup(line));
++			}
++		}
++		free(line);
++		pclose(fp);
++	}
++
+ 	menu_sort_and_deduplicate(menu);
+ 	free(path);
+ }
+@@ -42,7 +60,11 @@ static void activation_token_done(void *data, struct xdg_activation_token_v1 *ac
+ 	int pid = fork();
+ 	if (pid == 0) {
+ 		setenv("XDG_ACTIVATION_TOKEN", token, true);
+-		char *argv[] = {"/bin/sh", "-c", cmd->text, NULL};
++		char *argv[] = {
++			"/bin/bash", "-O", "expand_aliases", "-c",
++			"source ~/.bashrc >/dev/null 2>&1\n eval \"$1\"",
++			"wmenu-run", cmd->text, NULL
++		};
+ 		execvp(argv[0], (char**)argv);
+ 	} else {
+ 		if (cmd->exit) {

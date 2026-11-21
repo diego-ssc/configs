@@ -19,6 +19,15 @@
 ~/.emacs.d/Lambda-theme.el
 ```
 ```
+~/.config/alacritty/alacritty.toml
+```
+```
+~/.config/fontconfig/fonts.conf
+```
+```
+/usr/share/wayland-sessions/dwl.desktop
+```
+```
 ~/.xinitrc
 ```
 ```

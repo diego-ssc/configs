@@ -831,23 +831,25 @@
   (global-set-key (kbd "C-c y") 'alacritty-dir))
 
  ((eq system-type 'gnu/linux) ;; If on Linux
+  (set-face-attribute 'default nil :font "Source Code Pro-10")
   (setenv "JAVA_HOME" "/usr/lib/jvm/java-21-openjdk/")
   (setq lsp-java-java-path "/usr/lib/jvm/java-21-openjdk/bin/java")
-  (defun urxvt ()
+  (defun alacritty ()
     (interactive)
-    (let ((urxvt "urxvt"))
-      (start-process urxvt nil urxvt "-cd" (projectile-project-root))))
+    (let ((alacritty "alacritty"))
+      (start-process alacritty nil alacritty "--working-directory" (expand-file-name (projectile-project-root)))))
 
-  (global-set-key (kbd "C-c t") 'urxvt)
+  (global-set-key (kbd "C-c t") 'alacritty)
 
-  (defun urxvt-dir ()
+  (defun alacritty-dir ()
     (interactive)
-    (let ((urxvt "urxvt"))
-      (start-process urxvt nil urxvt "-cd"
-                     (or (and buffer-file-name (file-name-directory buffer-file-name))
-                         default-directory))))
+    (let ((alacritty "alacritty"))
+      (start-process alacritty nil alacritty "--working-directory"
+                     (expand-file-name
+                      (or (and buffer-file-name (file-name-directory buffer-file-name))
+                          default-directory)))))
 
-  (global-set-key (kbd "C-c y") 'urxvt-dir)))
+  (global-set-key (kbd "C-c y") 'alacritty-dir)))
 
 ;; Magit
 (require 'magit)
@@ -1286,7 +1288,7 @@ Run `bemol' in the workspace root first to generate the file."
                      "/Applications/Alacritty.app/Contents/MacOS/alacritty"
                      "-e" "sh" "-c" cmd))
      ((eq system-type 'gnu/linux)
-      (start-process "uart-urxvt" nil "urxvt" "-e" "sh" "-c" cmd)))))
+      (start-process "uart-alacritty" nil "alacritty" "-e" "sh" "-c" cmd)))))
 
 ;; LaTeX-specific company backends
 (add-hook 'LaTeX-mode-hook

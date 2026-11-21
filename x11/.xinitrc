@@ -45,13 +45,13 @@ numlockx &
 # Mouse config
 export LAMBDA_MOUSE=$(ratbagctl list | cut -d ":" -f 1 | head -n 1)
 
-ratbagctl "$LAMBDA_MOUSE" profile 0 set-active
+ratbagctl "$LAMBDA_MOUSE" profile active set 0
 ratbagctl "$LAMBDA_MOUSE" profile 0 button 4 action set key KEY_1
 ratbagctl "$LAMBDA_MOUSE" profile 0 button 5 action set key KEY_2
 ratbagctl "$LAMBDA_MOUSE" profile 0 button 9 action set key KEY_3
 ratbagctl "$LAMBDA_MOUSE" pro1file 0 button 3 action set key KEY_4
 ratbagctl "$LAMBDA_MOUSE" profile 0 button 10 action set key KEY_5
-ratbagctl "$LAMBDA_MOUSE" profile 0 dpi set 1600
+ratbagctl "$LAMBDA_MOUSE" profile 0 dpi set 800
 ratbagctl "$LAMBDA_MOUSE" info | grep -E "Button: (3|4|5|9|10) is mapped"
 
 setxkbmap -layout us -option compose:ralt
